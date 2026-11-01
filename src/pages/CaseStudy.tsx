@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { DecisionSketch, HeroScene, JourneyFlow, ScreenPlaceholder, seedOf, StackArt } from "../components/CaseArt";
+import { DecisionSketch, HeroScene, JourneyFlow, seedOf, StackArt } from "../components/CaseArt";
 import { GlyphTile } from "../components/Glyphs";
 import { Closing } from "../components/Layout";
 import { Lightbox } from "../components/Lightbox";
@@ -147,6 +147,9 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
   const related = projects.filter((x) => x.slug !== p.slug && x.kind !== "inhouse" && x.category === p.category).sort((a, b) => (seedOf(a.slug + p.slug) % 97) - (seedOf(b.slug + p.slug) % 97)).slice(0, 3);
   const chips = [...p.platforms, ...p.scope].slice(0, 3);
   const openKey = (k: string) => setOpen(Math.max(0, gallery.indexOf(k)));
+  // Screens worth a section: everything except the image already shown in the hero.
+  const extra = p.screens.filter((k) => k !== p.cover);
+  const shown = extra.slice(0, extra.length >= 5 ? 5 : extra.length);
   let n = 0;
   const topic = p.kind === "inhouse" ? "hire" : p.category === "AI products" ? "product" : "product";
 
@@ -311,21 +314,26 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       </section>
       )}
 
-      {/* Screens (projects without chapters) */}
-      {!c.chapters && (
+      {/* Screens (projects without chapters): only screens beyond the hero image, laid out for how many there are */}
+      {!c.chapters && extra.length > 0 && (
         <section className="section-y border-t">
           <div className="wrap">
-            <Head n={++n} eyebrow="Screens" title={<>Selected <span className="text-primary">screens</span></>} aside={p.screens.length ? "Tap any screen to open it full size." : "Full screens are shared on a call. Here is the shape of the work."} />
+            <Head n={++n} eyebrow="Screens" title={<>Selected <span className="text-primary">screens</span></>} aside="Tap any screen to open it full size." />
             <div className="mt-14 grid gap-6 md:grid-cols-2 lg:gap-10">
-              {p.screens.length > 0
-                ? p.screens.slice(0, 6).map((k) => (
-                    <button key={k} className="group block cursor-zoom-in" onClick={() => openKey(k)} aria-label={`Open ${p.title} screen`}>
-                      <Shot id={k} alt={`${p.title} screen`} mode="full" sizes="(min-width: 1024px) 45vw, 90vw" />
-                    </button>
-                  ))
-                : [0, 1].map((k) => <ScreenPlaceholder key={k} category={p.category} seed={seed + k} />)}
+              {shown.map((k, j) => {
+                const wide = shown.length === 1 || (shown.length !== 2 && shown.length !== 4 && j === 0);
+                return (
+                  <button key={k} className={`group block cursor-zoom-in ${wide ? "md:col-span-2" : ""}`} onClick={() => openKey(k)} aria-label={`Open ${p.title} screen`}>
+                    <Shot id={k} alt={`${p.title} screen`} mode="full" className={wide ? "md:aspect-[16/9]" : ""} sizes={wide ? "90vw" : "(min-width: 768px) 45vw, 90vw"} />
+                  </button>
+                );
+              })}
             </div>
-            {p.screens.length > 6 && <p className="mt-6 text-small text-muted-foreground">+{p.screens.length - 6} more screens. <button className="text-foreground underline underline-offset-4" onClick={() => setOpen(6)}>View all</button></p>}
+            {extra.length > shown.length && (
+              <button className="text-link mt-8 text-muted-foreground hover:text-foreground" onClick={() => openKey(extra[0])}>
+                View all {extra.length} screens
+              </button>
+            )}
           </div>
         </section>
       )}
