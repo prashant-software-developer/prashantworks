@@ -94,11 +94,11 @@ export const experience = [
   {
     role: "Software Developer & Product Designer",
     company: "Wispel",
-    note: "Sales engagement platform · Paris (Remote)",
-    url: "https://www.wispel.app/",
+    note: "AI parallel dialer for B2B sales teams · Paris (Remote)",
+    url: "https://wispel.app/",
     period: "Jun 2023 – Sep 2024",
     points: [
-      "Early engineer working directly with the founders, owning features from prototype to production.",
+      "Early engineer on Wispel, a parallel dialer that connects outbound reps to live decision-makers, working directly with the founders from prototype to production.",
       "Built real-time calling, messaging and email on the Vonage SDK with React and Redux.",
       "Engineered Node.js, Express and MongoDB services on AWS, integrating Freshsales, GoHighLevel and Google APIs.",
       "Turned user and market research into rapid Next.js prototypes that set feature priorities.",

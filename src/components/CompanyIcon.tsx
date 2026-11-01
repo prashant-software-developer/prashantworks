@@ -16,8 +16,8 @@ export function CompanyIcon({ company, size = "h-14 w-14" }: { company: string; 
       );
     case "Wispel":
       return (
-        <span className={tile} role="img" aria-label="Wispel">
-          <span className="text-xl font-medium tracking-tight">W</span>
+        <span className={tile}>
+          <img src="/img/logos/wispel.svg" alt="Wispel" className="h-1/2 w-1/2" />
         </span>
       );
     case "IIIT Sonepat":
