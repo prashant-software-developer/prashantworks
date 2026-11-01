@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { AudienceArt, DecisionSketch, sketchKind, type SketchKind, HeroScene, JourneyFlow, PersonaMark, seedOf } from "../components/CaseArt";
+import { DecisionSketch, sketchKind, type SketchKind, HeroScene, JourneyFlow, PersonaMark, seedOf } from "../components/CaseArt";
 import { GlyphTile } from "../components/Glyphs";
 import { Closing } from "../components/Layout";
 import { Lightbox } from "../components/Lightbox";
@@ -216,16 +216,8 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       {/* Problem and audience */}
       <section className="section-y border-t">
         <div className="wrap">
-          <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-x-20">
-            <div className="lg:col-span-7">
-              <p className="eyebrow flex items-center gap-3"><span className="text-primary">{pad(++n)}</span><span className="h-px w-8 bg-border" />The problem</p>
-              <h2 className="h-section mt-6">What needed <span className="text-primary">solving</span></h2>
-              <p className="mt-10 text-lg font-light leading-relaxed md:text-xl md:leading-relaxed">{c.context.problem}</p>
-            </div>
-            <div className="mx-auto w-full max-w-md bg-[hsl(225_20%_97%)] px-6 py-4 lg:col-span-5 lg:max-w-none">
-              <AudienceArt icon={p.icon} count={c.context.audience.length} />
-            </div>
-          </div>
+          <Head n={++n} eyebrow="The problem" title={<>What needed <span className="text-primary">solving</span></>} />
+          <p className="mt-10 max-w-3xl text-lg font-light leading-relaxed md:text-xl md:leading-relaxed">{c.context.problem}</p>
 
           <div className="mt-14 md:mt-16">
             <p className="eyebrow">Who it’s for</p>
