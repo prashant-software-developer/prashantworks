@@ -96,7 +96,7 @@ export default function Home() {
   // Same kind of image on every card: a plain app screen, framed on the grey panel.
   const picks = [
     { slug: "ringover", image: "98cce517ef" },
-    { slug: "agentic-soc-platform", image: "soc/02" },
+    { slug: "agentic-soc-platform", image: "soc/03" },
     { slug: "ai-governance-console", image: "b79b757600" },
     { slug: "qriosx", image: "14ea830a66" },
   ].flatMap(({ slug, image }) => {

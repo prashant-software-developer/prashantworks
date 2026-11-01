@@ -59,6 +59,11 @@ export function Shot({
     <div className={`relative aspect-[4/3] overflow-hidden bg-[hsl(225_20%_96%)] ${className}`}>
       {bleed ? (
         <Img id={id} alt={alt} sizes={sizes} loading={loading} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+      ) : framed ? (
+        // Every framed screen has the same 3:2 shape, trimmed from the bottom so the app's top stays visible.
+        <div className="absolute left-1/2 top-1/2 aspect-[3/2] w-[84%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[8px] border border-black/[0.06] bg-background shadow-[0_20px_40px_-24px_rgba(20,24,40,0.3)]">
+          <Img id={id} alt={alt} sizes={sizes} loading={loading} className="h-full w-full object-cover object-left-top" />
+        </div>
       ) : mode === "peek" ? (
         <div className="absolute inset-x-[7%] bottom-0 top-[8%] overflow-hidden rounded-t-[10px] border border-b-0 border-black/[0.06] bg-background shadow-[0_24px_48px_-24px_rgba(20,24,40,0.25)] transition-transform duration-500 group-hover:-translate-y-1.5">
           <Img id={id} alt={alt} sizes={sizes} loading={loading} className="h-full w-full object-cover object-left-top" />
