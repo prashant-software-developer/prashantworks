@@ -1,0 +1,946 @@
+import type { CaseContent } from "./types";
+
+export const content: Record<string, CaseContent> = {
+  "testguard": {
+    tagline: "Know whether a release is safe before it reaches users",
+    summary: "TestGuard is a QA and deployment monitoring dashboard that tracks test coverage, risk levels, release confidence and staging performance in one place. It is for engineering and QA teams who want safer, faster releases without reading raw test reports. I designed the product and built its front-end.",
+    seo: {
+      title: "TestGuard: QA dashboard UX case study",
+      description: "TestGuard is a QA and release monitoring dashboard. Product designer and developer case study: coverage, risk and release confidence on one screen.",
+      keywords: ["QA dashboard design", "release monitoring dashboard UX", "test coverage dashboard design", "DevOps dashboard case study", "SaaS dashboard designer and developer", "product designer for developer tools"],
+    },
+    context: {
+      problem: "Before a release, teams piece together test results, coverage reports and staging metrics from different tools. Each signal is useful on its own, but nobody has one view that says whether a build is safe to ship. The hard part was turning many technical signals into a decision people could trust.",
+      audience: [
+        { who: "QA engineers", need: "See which areas lack coverage and which tests fail or flake most often." },
+        { who: "Engineering leads", need: "Get a clear go or no-go view before each release." },
+        { who: "Developers", need: "Find the failing test or slow endpoint behind a warning without digging." },
+      ],
+      goals: ["Show release readiness at a glance", "Make risk visible by area, not just by test", "Link every warning to its cause", "Keep staging performance next to test results"],
+    },
+    approach: [
+      { title: "Mapping the release signals", text: "I listed every signal a team checks before a release: coverage, failing tests, flaky tests, risk and staging performance. Then I grouped them by the question each one answers." },
+      { title: "Defining release confidence", text: "I worked out with the team how coverage, risk and staging results should roll up into one confidence view. The rule had to be simple enough to explain in a single tooltip." },
+      { title: "Designing the dashboard", text: "I designed the overview first, then the drill-down screens for coverage, risk and staging. Every card on the overview leads to the screen that explains it." },
+      { title: "Building the front-end", text: "I built the dashboard in React with reusable chart, table and status components. I kept the data layer separate so new test sources could plug in later." },
+    ],
+    journey: { title: "From build to release decision", steps: ["New build arrives", "Tests and coverage update", "Review release confidence", "Drill into risky areas", "Decide to ship"], key: 2 },
+    structure: {
+      root: "TestGuard",
+      groups: [
+        { name: "Overview", items: ["Release confidence", "Risk summary", "Recent builds"] },
+        { name: "Coverage", items: ["By module", "Trends", "Uncovered areas"] },
+        { name: "Risk", items: ["Risk levels", "Failing tests", "Flaky tests"] },
+        { name: "Staging", items: ["Performance", "Errors", "Build comparison"] },
+        { name: "Settings", items: ["Integrations", "Thresholds"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Confidence with its reasons attached",
+        problem: "A single release confidence level is easy to read but easy to distrust. If people can’t see why it dropped, they ignore it.",
+        alt: "Show only a pass or fail badge for each build.",
+        choice: "I paired the confidence level with the signals that moved it most, each linked to its detail screen.",
+        why: "People trust a score they can question. Showing the reasons turns the overview into a starting point for action, not a verdict.",
+      },
+      {
+        title: "Risk by area, not by test",
+        problem: "A flat list of failing tests hides where the risk sits. A few failures in a core module matter more than many in minor screens.",
+        alt: "A long sortable table of every test result as the main view.",
+        choice: "I grouped coverage and failures by module and showed a risk level for each area, with the test list one click below.",
+        why: "Leads decide by area, not by test. The full table is still there for the person who has to fix it.",
+      },
+      {
+        title: "Staging performance beside test results",
+        problem: "Tests can pass while staging gets slower, and that often shows up only after release.",
+        alt: "A separate performance tab that nobody opens before shipping.",
+        choice: "I put staging response times and errors on the same overview as tests and coverage, compared with the previous build.",
+        why: "A release decision needs both views at once. Keeping them together makes a slow build as visible as a failing one.",
+      },
+    ],
+    features: [
+      { icon: "shield", title: "Release confidence", text: "One view of whether a build is ready, with the reasons beside it." },
+      { icon: "chart", title: "Coverage tracking", text: "Coverage by module and over time, so gaps are easy to spot." },
+      { icon: "bell", title: "Risk flags", text: "Areas with rising risk or flaky tests are flagged before release." },
+      { icon: "graph", title: "Staging performance", text: "Response times and errors on staging, next to the test results." },
+      { icon: "code", title: "Build history", text: "Every build with its tests, coverage and confidence, ready to compare." },
+    ],
+    system: [
+      { name: "Interface", items: ["React", "TypeScript", "Chart and table components"] },
+      { name: "Services", items: ["Node.js API", "CI webhooks", "Test report parsers"] },
+      { name: "Data", items: ["PostgreSQL", "Build history"] },
+      { name: "Infrastructure", items: ["Docker", "AWS"] },
+    ],
+    outcome: [
+      "Product design for the overview, coverage, risk and staging screens",
+      "A release confidence view linked to the signals behind it",
+      "A React front-end with reusable chart, table and status components",
+      "A data layer that keeps test sources separate from the interface",
+    ],
+    learned: [
+      "A score earns trust only when people can see what moved it.",
+      "Dashboards for engineers work best when each screen answers one question and the rest sits one click down.",
+    ],
+  },
+
+  "taskflow": {
+    tagline: "One place to plan work, set priorities and see what changed",
+    summary: "TaskFlow is a task management platform for teams who want clearer workflows, visible priorities and better coordination. Updates appear in real time, so everyone works from the same picture. I designed the product’s flows and interface.",
+    seo: {
+      title: "TaskFlow: task management UX case study",
+      description: "TaskFlow is a task management platform with real-time updates. Freelance product designer case study: clear priorities, boards and team coordination.",
+      keywords: ["task management app design", "project management UX case study", "collaboration tool UI design", "kanban board design", "SaaS product designer", "freelance product designer for startups"],
+    },
+    context: {
+      problem: "Teams lose time asking who is doing what and which task matters most. Many task tools can do everything, which makes them slow to learn and easy to clutter. TaskFlow needed to stay simple while still handling priorities, workflows and live updates.",
+      audience: [
+        { who: "Team members", need: "See their own tasks and today’s priorities without searching." },
+        { who: "Team leads", need: "Balance workload and spot blocked work early." },
+        { who: "Project managers", need: "Follow progress across a workflow from one shared view." },
+      ],
+      goals: ["Make priority obvious on every task", "Keep everyone on the same live picture", "Make workflow stages easy to set up", "Keep the interface light enough to adopt quickly"],
+    },
+    approach: [
+      { title: "Mapping how work moves", text: "I mapped how a task is created, assigned, moved through stages and closed. That showed where coordination usually breaks: handovers and changing priorities." },
+      { title: "Reviewing similar tools", text: "I reviewed how common task tools handle boards, lists and notifications. I noted where they add useful power and where they only add noise." },
+      { title: "Designing the core views", text: "I designed My tasks, the board and the task detail first, since they carry most of the daily use. Priority, owner and due date follow the same pattern on every view." },
+      { title: "Handover for the build", text: "I prepared the screens, states and components for development. Each interaction, such as moving a card or changing a priority, had its empty, loading and error states drawn." },
+    ],
+    journey: { title: "From new task to done", steps: ["Create a task", "Set priority and owner", "Move through stages", "See live updates", "Mark it done"], key: 1 },
+    structure: {
+      root: "TaskFlow",
+      groups: [
+        { name: "My work", items: ["My tasks", "Today", "Mentions"] },
+        { name: "Projects", items: ["Board", "List", "Stages"] },
+        { name: "Task", items: ["Details", "Subtasks", "Comments", "Activity"] },
+        { name: "Team", items: ["Members", "Workload"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Priority as a fixed field",
+        problem: "In many task tools, priority is a hidden label, so everything ends up looking equally urgent.",
+        alt: "A free-form tag that each team could name however it liked.",
+        choice: "I made priority a fixed field with a few clear levels, shown first on every card and row, and used it to sort My tasks by default.",
+        why: "A fixed scale means the same thing to everyone. Sorting by it answers the question people open the app with: what should I do next?",
+      },
+      {
+        title: "Live updates that don’t interrupt",
+        problem: "Real-time updates help coordination, but cards jumping around while someone reads the board are disorienting.",
+        alt: "Reorder the board instantly whenever anyone changes a task.",
+        choice: "Changes appear in place with a brief highlight, and a small notice offers to refresh the order when several things have moved.",
+        why: "People keep their place while still seeing what changed. The board stays live without feeling unstable.",
+      },
+      {
+        title: "My tasks before the board",
+        problem: "Boards show the whole team’s work, but most people start the day asking only about their own tasks.",
+        alt: "Open every user on the project board.",
+        choice: "I made My tasks the home view, grouped by due date and priority, with the board one click away.",
+        why: "Leads still get the full board. Everyone else gets a short list they can act on straight away.",
+      },
+    ],
+    features: [
+      { icon: "tasks", title: "Boards and lists", text: "Switch between a board and a list of the same tasks." },
+      { icon: "star", title: "Clear priorities", text: "Each task carries a priority that sorts and colours it everywhere." },
+      { icon: "bell", title: "Real-time updates", text: "Changes from teammates appear as they happen, without losing your place." },
+      { icon: "users", title: "Owners and workload", text: "See who owns what and who has too much on." },
+      { icon: "chat", title: "Comments on tasks", text: "Discussion and decisions stay on the task they belong to." },
+    ],
+    outcome: [
+      "User flows for creating, assigning, moving and closing tasks",
+      "UI design for My tasks, the project board, list view and task detail",
+      "Interaction states for real-time updates, empty states and errors",
+      "A component set for cards, priority labels, owners and due dates",
+      "Hand-off files ready for development",
+    ],
+    learned: [
+      "Simple tools come from deciding what to leave out, not from hiding features.",
+      "Real-time updates need as much design as the static screens. Movement on screen is information too.",
+    ],
+  },
+
+  "clinic-management-system": {
+    tagline: "Appointments, patients and daily clinic numbers in one calm workspace",
+    summary: "An all-in-one clinic system where doctors and admins manage appointments, monitor patient data and run daily operations. A KPI dashboard with real-time analytics shows how the day is going. I designed the product and built its responsive front-end.",
+    seo: {
+      title: "Clinic Management System: UX case study",
+      description: "Clinic management system for appointments, patient data and KPIs. Product designer and developer case study: one responsive workspace for each role.",
+      keywords: ["clinic management software design", "healthcare dashboard UX", "appointment scheduling UI design", "healthtech product designer", "medical SaaS case study", "clinic admin dashboard design"],
+    },
+    context: {
+      problem: "Clinics often run on a mix of paper diaries, spreadsheets and separate tools. Doctors and admins need the same patient information but use it in very different ways. The system had to serve both without becoming a crowded screen of everything.",
+      audience: [
+        { who: "Doctors", need: "Have today’s patients and their history ready before each appointment." },
+        { who: "Front-desk admins", need: "Book, reschedule and check in patients quickly." },
+        { who: "Clinic managers", need: "Follow daily KPIs to see how the clinic is running." },
+      ],
+      goals: ["Make booking and rescheduling fast", "Give doctors patient context in one view", "Show clinic KPIs in real time", "Work well on desktop and tablet"],
+    },
+    approach: [
+      { title: "Mapping the clinic day", text: "I mapped a clinic day from opening to close: bookings, check-ins, consultations and follow-ups. I noted which role does each step and what they need on screen." },
+      { title: "Separating the roles", text: "I gave doctors, admins and managers different home views built on the same data. Each sees their own work first and can reach the rest when needed." },
+      { title: "Designing the core screens", text: "I designed the schedule, the patient profile and the KPI dashboard as the core of the product. Status colours and layouts stay the same across all of them." },
+      { title: "Building the front-end", text: "I built a responsive React front-end with live updates for the schedule and KPIs. Shared components kept forms, tables and charts consistent." },
+    ],
+    journey: { title: "A patient’s visit", steps: ["Book an appointment", "Check in at desk", "Doctor reviews patient summary", "Note the consultation", "Schedule a follow-up"], key: 2 },
+    structure: {
+      root: "Clinic Management System",
+      groups: [
+        { name: "Schedule", items: ["Day view", "Week view", "Check-ins"] },
+        { name: "Patients", items: ["Profiles", "Visit history", "Documents"] },
+        { name: "Dashboard", items: ["KPIs", "Daily analytics", "Reports"] },
+        { name: "Admin", items: ["Doctors", "Rooms", "Settings"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Role-based home screens",
+        problem: "Doctors and front-desk staff open the system for different reasons, and a shared home made both search for their work.",
+        alt: "One dashboard for everyone with every widget on it.",
+        choice: "Doctors land on today’s patient list, admins on the schedule and check-ins, and managers on the KPIs.",
+        why: "Same data, different starting points. Each role reaches its first task without scrolling past someone else’s.",
+      },
+      {
+        title: "Patient summary before full history",
+        problem: "Doctors often have little time between appointments to read through a record.",
+        alt: "A full patient record split into tabs for every type of data.",
+        choice: "I put a short summary at the top of the patient view, covering the reason for the visit, recent visits, alerts and notes, with the full history below.",
+        why: "The summary covers what a doctor needs in the moment. The full record is still one scroll away.",
+      },
+      {
+        title: "KPIs that lead to action",
+        problem: "Real-time charts are easy to add, but they often just decorate a dashboard.",
+        alt: "A wall of charts covering every metric the system can count.",
+        choice: "I kept a small set of daily KPIs, such as today’s appointments, cancellations and patients waiting, each linking to the list behind it.",
+        why: "A number is only useful if someone can act on it. Linking each KPI to its list turns a chart into a to-do.",
+      },
+    ],
+    features: [
+      { icon: "calendar", title: "Appointment scheduling", text: "Book, reschedule and check in patients from a day or week view." },
+      { icon: "health", title: "Patient records", text: "History, notes and documents for each patient in one place." },
+      { icon: "chart", title: "Live KPIs", text: "Daily clinic numbers update in real time on the dashboard." },
+      { icon: "users", title: "Role-based views", text: "Doctors, admins and managers each start where their work is." },
+      { icon: "layout", title: "Responsive layout", text: "The same screens work on a desktop or a tablet at the front desk." },
+    ],
+    system: [
+      { name: "Interface", items: ["React", "TypeScript", "Responsive layouts"] },
+      { name: "Services", items: ["Node.js API", "WebSockets for live updates", "Role-based access"] },
+      { name: "Data", items: ["PostgreSQL", "Patient records", "Appointments"] },
+      { name: "Infrastructure", items: ["Docker", "AWS"] },
+    ],
+    outcome: [
+      "Role-based flows for doctors, admins and managers",
+      "UI design for the schedule, patient profile and KPI dashboard",
+      "A responsive React front-end with live schedule and KPI updates",
+      "Shared components for forms, tables, status labels and charts",
+    ],
+    learned: [
+      "In healthcare tools, what you leave off the first screen matters as much as what you put on it.",
+      "Designing by role, not by feature, made the system feel smaller than it is.",
+    ],
+  },
+
+  "linkedin-lead-enricher": {
+    tagline: "Turn LinkedIn profiles into a clean, targeted prospect list in seconds",
+    summary: "LinkedIn Lead Enricher is a lightweight tool that extracts profile data, job roles and contact insights from LinkedIn. Marketers and founders use it to build targeted prospect lists in seconds instead of copying details by hand. I designed the product and built the front-end and the extraction pipeline.",
+    seo: {
+      title: "LinkedIn Lead Enricher: UX case study",
+      description: "LinkedIn Lead Enricher turns profiles into prospect lists. Product designer and developer case study: a lightweight scraping tool with a clear review flow.",
+      keywords: ["LinkedIn lead generation tool design", "prospecting tool UX case study", "lead enrichment software design", "sales tool product designer", "B2B SaaS designer and developer", "LinkedIn scraper UI"],
+    },
+    context: {
+      problem: "Founders and marketers often build prospect lists by opening profiles one by one and copying names, roles and companies into a spreadsheet. It is slow, error-prone and hard to keep consistent. The tool had to speed this up while keeping the user in control of what goes into the list.",
+      audience: [
+        { who: "Founders", need: "Build a short, well-targeted list for outreach without a sales team." },
+        { who: "Marketers", need: "Get clean data by role and company to plan campaigns." },
+        { who: "Growth teams", need: "Drop lists straight into the spreadsheet or outreach tool they already use." },
+      ],
+      goals: ["Extract profile data in a few clicks", "Show results in a clean, reviewable table", "Make filtering by role and company easy", "Export lists ready for outreach"],
+    },
+    approach: [
+      { title: "Mapping the manual process", text: "I mapped how people build lists by hand, from search to spreadsheet. Each copy-and-paste step became something the tool should do for them." },
+      { title: "Designing the review step", text: "I designed the results table before the extraction screens, because that is where users judge quality. Every column had to be readable, sortable and easy to clean." },
+      { title: "Building the pipeline", text: "I built the extraction pipeline and the front-end together, so the interface showed real progress and real errors. Results stream into the table as profiles are processed." },
+      { title: "Shaping the export", text: "I shaped the export so lists open cleanly in spreadsheets and outreach tools. Column names and formats stay the same every time." },
+    ],
+    journey: { title: "From profiles to prospect list", steps: ["Choose profiles to enrich", "Start the extraction", "Review enriched results", "Filter by role", "Export the list"], key: 2 },
+    structure: {
+      root: "LinkedIn Lead Enricher",
+      groups: [
+        { name: "Extract", items: ["New extraction", "Progress", "History"] },
+        { name: "Lists", items: ["All lists", "List detail", "Filters"] },
+        { name: "Export", items: ["Spreadsheet export", "Column settings"] },
+        { name: "Account", items: ["Usage", "Settings"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Review before export",
+        problem: "Scraped data is never perfectly clean, and a bad row in an outreach list is costly.",
+        alt: "Extract and download a file in one step.",
+        choice: "Results land in a table first, where users can filter by role, remove rows and fix fields before exporting.",
+        why: "A short review step keeps lists accurate. Users trust the tool more when they can see and shape what it found.",
+      },
+      {
+        title: "Progress that shows real rows",
+        problem: "Extraction takes time, and a spinner gives no sense of what is happening.",
+        alt: "A progress bar with a percentage and nothing else.",
+        choice: "I streamed rows into the table as each profile was processed, with a clear count of done, pending and failed.",
+        why: "Early results reassure people that the tool works. They also let someone stop a poor search before it finishes.",
+      },
+      {
+        title: "A list builder, not a CRM",
+        problem: "Lead tools tend to grow into full CRMs, which adds setup and screens a list builder does not need.",
+        alt: "Add pipelines, deals and sequences inside the tool.",
+        choice: "I kept the product to extract, review and export, and made exports fit the tools people already use.",
+        why: "Staying small kept it quick to learn. It also means it fits into any existing sales setup.",
+      },
+    ],
+    features: [
+      { icon: "search", title: "Profile extraction", text: "Pulls names, job roles and companies from LinkedIn profiles." },
+      { icon: "users", title: "Contact insights", text: "Adds role and company context to each prospect." },
+      { icon: "chart", title: "Live progress", text: "Rows appear as profiles are processed, with a clear count of what is left." },
+      { icon: "layout", title: "Clean results table", text: "Sort, filter and edit results before they leave the tool." },
+      { icon: "doc", title: "Ready-to-use exports", text: "Lists export in a consistent format for spreadsheets and outreach tools." },
+    ],
+    system: [
+      { name: "Interface", items: ["React", "TypeScript", "Streaming results table"] },
+      { name: "Services", items: ["Node.js API", "Job queue"] },
+      { name: "Extraction", items: ["Python workers", "Headless browser", "Data cleaning"] },
+      { name: "Data", items: ["PostgreSQL", "Spreadsheet export"] },
+    ],
+    outcome: [
+      "Product design for extraction, live progress, results review and export",
+      "A React front-end with a streaming results table",
+      "An extraction pipeline that turns profiles into structured rows",
+      "Consistent exports for spreadsheets and outreach tools",
+    ],
+    learned: [
+      "For data tools, the review screen is the product. Extraction is only half the job.",
+      "Showing real progress builds more trust than a fast spinner.",
+    ],
+  },
+
+  "psm-screening-platform": {
+    tagline: "Dynamic intake forms in front, a clear review dashboard behind",
+    summary: "PSM Screening Platform streamlines complex intake and screening through smart form submissions. People fill in dynamic forms, and internal agents review, verify and act on the data in a dashboard. I designed both sides: the forms and the agent workspace.",
+    seo: {
+      title: "PSM Screening Platform: UX case study",
+      description: "PSM Screening Platform pairs dynamic intake forms with a review dashboard. Freelance product designer case study on screening flows agents act on quickly.",
+      keywords: ["intake form design", "screening platform UX case study", "dynamic form UX", "case review dashboard design", "eligibility check workflow design", "SaaS product designer for operations"],
+    },
+    context: {
+      problem: "Screening for eligibility, onboarding or support needs a lot of information, and long static forms put people off. On the other side, agents receive submissions with missing or unclear data and spend time chasing it. The platform had to make filling in easier and reviewing faster at the same time.",
+      audience: [
+        { who: "Applicants", need: "Answer only the questions that apply to them and see how far they are." },
+        { who: "Review agents", need: "See each submission laid out so they can verify it and decide quickly." },
+        { who: "Team leads", need: "See the queue, workload and decisions across agents." },
+      ],
+      goals: ["Ask only relevant questions", "Catch missing data before submission", "Give agents a fast review layout", "Keep a clear record of each decision"],
+    },
+    approach: [
+      { title: "Mapping both sides", text: "I mapped the journey from first question to final decision, for the person filling in and for the agent reviewing. Most delays sat in the handover between the two." },
+      { title: "Designing the dynamic form", text: "I designed forms that branch on earlier answers and validate as people go. Progress by section and saved drafts make long forms feel manageable." },
+      { title: "Designing the review dashboard", text: "I designed the queue and the submission view around the agent’s work: review, verify, act. Each submission shows its status and what still needs checking." },
+      { title: "Documenting the logic", text: "I documented form logic, field states and dashboard components for development. Each status and decision had its own state drawn." },
+    ],
+    journey: { title: "From submission to decision", steps: ["Start the intake form", "Answer dynamic questions", "Submit the form", "Agent verifies details", "Decision and next step"], key: 3 },
+    structure: {
+      root: "PSM Screening Platform",
+      groups: [
+        { name: "Intake", items: ["Dynamic form", "Progress", "Saved drafts"] },
+        { name: "Queue", items: ["New submissions", "In review", "Needs info"] },
+        { name: "Submission", items: ["Answers", "Verification checklist", "Notes", "Decision"] },
+        { name: "Admin", items: ["Form setup", "Agents", "Reports"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Branching forms over one long form",
+        problem: "A single form that covers every case asks most people questions that don’t apply to them.",
+        alt: "One long form with optional sections people skip themselves.",
+        choice: "Questions branch on earlier answers, so each person sees only what applies, with progress shown by section.",
+        why: "Shorter paths are easier to finish and easier to answer correctly. Agents get cleaner data as a result.",
+      },
+      {
+        title: "Verification as a checklist",
+        problem: "Agents had to read a whole submission to work out what still needed checking.",
+        alt: "Show the raw answers and let each agent verify in their own way.",
+        choice: "Each submission opens with a short checklist of items to verify, linked to the answers they relate to, beside the decision buttons.",
+        why: "The checklist makes review consistent across agents. It also shows at a glance how close a case is to a decision.",
+      },
+      {
+        title: "Needs info as its own status",
+        problem: "Incomplete submissions either got rejected too early or sat untouched while agents waited for answers.",
+        alt: "Use only approved and rejected states.",
+        choice: "I added a Needs info status that sends a request back to the applicant and keeps the case in its own queue.",
+        why: "It separates waiting from deciding. Agents can see what is blocked on them and what is blocked on someone else.",
+      },
+    ],
+    features: [
+      { icon: "doc", title: "Dynamic forms", text: "Questions adapt to earlier answers, so each person sees only what applies." },
+      { icon: "shield", title: "Inline validation", text: "Missing or invalid answers are flagged before the form is submitted." },
+      { icon: "tasks", title: "Review queue", text: "Submissions grouped by status, so agents know what to pick up next." },
+      { icon: "search", title: "Verification checklist", text: "Each case lists what to check, linked to the answers it concerns." },
+      { icon: "users", title: "Team overview", text: "Leads see workload and decisions across agents." },
+    ],
+    outcome: [
+      "Flows for applicants and review agents, from first question to decision",
+      "Dynamic form design with branching, validation, progress and saved drafts",
+      "Agent dashboard with queue, submission view, verification checklist and decision actions",
+      "Status and component states documented for development",
+    ],
+    learned: [
+      "A good intake form is half of a good review tool.",
+      "Designing the waiting states, not just the decisions, is what keeps a queue moving.",
+    ],
+  },
+
+  "hr-talk": {
+    tagline: "A private, friendly place to ask HR anything",
+    summary: "HR Talk is an internal platform where employees chat with HR to clarify doubts, get help with policies, discuss growth plans and resolve concerns. The interface is confidential and friendly, so people feel safe asking. I designed the product’s flows and interface.",
+    seo: {
+      title: "HR Talk: employee HR chat UX case study",
+      description: "HR Talk is a confidential chat between employees and HR. Freelance product designer case study: policy help, growth talks and concerns in one safe space.",
+      keywords: ["HR chat platform design", "employee experience UX case study", "internal tool UI design", "HR software product designer", "confidential messaging UX", "people ops SaaS design"],
+    },
+    context: {
+      problem: "Employees often hold back questions about policies, growth or concerns because email feels formal and walking up to HR feels exposed. HR, in turn, answers the same policy questions many times across scattered channels. The platform had to feel safe enough to use and organised enough for HR to manage.",
+      audience: [
+        { who: "Employees", need: "Ask HR questions and raise concerns in a private, easy way." },
+        { who: "New joiners", need: "Get quick answers on policies while they settle in." },
+        { who: "HR team", need: "Keep every conversation in one place, sorted by topic and status." },
+      ],
+      goals: ["Make it feel safe to ask", "Route questions by topic", "Help people find policy answers themselves", "Give HR one organised inbox"],
+    },
+    approach: [
+      { title: "Mapping what people ask HR", text: "I grouped the reasons people contact HR into doubts, policies, growth and concerns. Each topic needed a different tone and a different level of privacy." },
+      { title: "Designing for trust", text: "I made privacy visible in the interface, with clear notes on who can see each conversation. Tone, colour and copy were kept warm and plain." },
+      { title: "Designing the core screens", text: "I designed the employee home, the chat and the HR inbox. Policy answers sit beside the chat so simple questions resolve faster." },
+      { title: "Handover with sensitive states", text: "I prepared screens, states and components for development. Sensitive states, such as a confidential concern, were specified in detail." },
+    ],
+    journey: { title: "From question to resolution", steps: ["Pick a topic", "Check policy answers", "Start a private chat", "HR responds", "Mark as resolved"], key: 2 },
+    structure: {
+      root: "HR Talk",
+      groups: [
+        { name: "Home", items: ["Topics", "Recent chats", "Policy highlights"] },
+        { name: "Chat", items: ["Conversation", "Attachments", "Status"] },
+        { name: "Policies", items: ["Search", "Categories", "Saved"] },
+        { name: "HR inbox", items: ["All conversations", "By topic", "Confidential"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Topic first, then chat",
+        problem: "An open chat box gives HR no context and leaves employees unsure how to start.",
+        alt: "A single blank chat window, like a generic messenger.",
+        choice: "Employees pick a topic first: doubt, policy, growth or concern. The chat then opens with a short prompt and relevant policy answers.",
+        why: "The topic routes the conversation to the right person and sets the tone. Some questions end with a policy answer, no chat needed.",
+      },
+      {
+        title: "Confidentiality shown, not promised",
+        problem: "People only raise sensitive concerns if they believe the conversation is private.",
+        alt: "A general privacy note in the footer or on a settings page.",
+        choice: "Each conversation shows who can see it, and concerns carry a distinct confidential label with restricted access.",
+        why: "Seeing the privacy rule at the moment of writing does more than a policy page. It makes the safe option the obvious one.",
+      },
+      {
+        title: "Friendly for employees, structured for HR",
+        problem: "HR tools often look like ticket systems, which makes personal topics feel like support requests.",
+        alt: "Ticket numbers, priorities and service labels in the employee view.",
+        choice: "Employees see a chat with names, plain language and simple statuses like Open and Resolved, while HR keeps a structured inbox on its side.",
+        why: "Each side gets what it needs. Employees feel heard, and HR still works from an organised list.",
+      },
+    ],
+    features: [
+      { icon: "chat", title: "Private chat with HR", text: "One-to-one conversations with the HR team." },
+      { icon: "lock", title: "Confidential concerns", text: "Sensitive topics are marked and visible only to the right people." },
+      { icon: "book", title: "Policy answers", text: "Common policy questions answered beside the chat." },
+      { icon: "cap", title: "Growth conversations", text: "A dedicated topic for career and growth plans, not just problems." },
+      { icon: "tasks", title: "Organised HR inbox", text: "HR sees conversations by topic, status and confidentiality." },
+    ],
+    outcome: [
+      "Flows for asking, chatting and resolving across doubts, policies, growth and concerns",
+      "UI design for the employee home, chat, policy search and HR inbox",
+      "Privacy and confidentiality states for sensitive conversations",
+      "A warm visual style and copy tone for an internal tool",
+      "Components and states ready for development",
+    ],
+    learned: [
+      "In HR tools, trust is a design problem before it is a feature.",
+      "Two audiences can share one system if each gets its own view of it.",
+    ],
+  },
+
+  "cognize": {
+    tagline: "A lightweight lead board that keeps contacts, stages and history together",
+    summary: "Cognize is a lightweight CRM and lead board, live at cognize.live. It helps small teams organise contacts, track lifecycle stages, enrich professional data and keep all activity history in one place, with auto summaries. It is my own product: I designed and built it.",
+    seo: {
+      title: "Cognize: lightweight CRM case study",
+      description: "Cognize is a lightweight CRM and lead board with auto summaries. Product designer and developer case study: contacts, stages and history in one clean view.",
+      keywords: ["lightweight CRM design", "lead board UX case study", "CRM product designer", "CRM with AI summaries", "startup CRM design and development", "SaaS designer and developer"],
+    },
+    context: {
+      problem: "Small teams outgrow spreadsheets for leads but find full CRMs heavy, slow to set up and full of fields they never use. Notes and activity end up scattered, so nobody has the full story of a contact. Cognize had to give structure without the weight.",
+      audience: [
+        { who: "Founders", need: "See every lead and its next step without setting up a full CRM." },
+        { who: "Freelancers and consultants", need: "Track conversations with prospects and clients in a simple way." },
+        { who: "Small sales teams", need: "Share history so anyone can pick up a lead." },
+      ],
+      goals: ["Keep setup close to zero", "Show lifecycle stage at a glance", "Bring activity history into one timeline", "Summarise each contact automatically"],
+    },
+    approach: [
+      { title: "Defining the smallest useful CRM", text: "I listed what a small team checks about a lead every day: who, which stage, what happened last and what comes next. Everything else became optional." },
+      { title: "Designing the board", text: "I designed the lead board around lifecycle stages, with cards that show the next step. Contact detail opens beside the board, not on a new page." },
+      { title: "Adding enrichment and summaries", text: "I added professional data enrichment and auto summaries of activity history. Both were designed to assist the user, not to fill fields silently." },
+      { title: "Building and shipping", text: "I built the front-end and back-end and launched it at cognize.live. I keep refining it as a live product." },
+    ],
+    journey: { title: "From new contact to next step", steps: ["Add a contact", "Enrich their profile", "Tag lifecycle stage", "Log activity", "Read the summary"], key: 4 },
+    structure: {
+      root: "Cognize",
+      groups: [
+        { name: "Board", items: ["Lifecycle stages", "Lead cards", "Filters"] },
+        { name: "Contacts", items: ["Profile", "Enriched data", "Tags"] },
+        { name: "Activity", items: ["Timeline", "Notes", "Auto summary"] },
+        { name: "Settings", items: ["Stages", "Tags", "Account"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "A board by lifecycle stage",
+        problem: "Contact lists show who you know but not where each relationship stands.",
+        alt: "A table of contacts with a stage column.",
+        choice: "The home view is a board with a column for each lifecycle stage, and moving a card moves the lead on.",
+        why: "Stage is the question people ask most. A board answers it before they read anything.",
+      },
+      {
+        title: "Summaries above the timeline",
+        problem: "A long activity history is complete but slow to read before a call.",
+        alt: "Show only the raw timeline, newest first.",
+        choice: "Each contact opens with an auto summary of its history, with the full timeline below for detail.",
+        why: "The summary gets someone up to speed fast. The timeline keeps the source visible, so the summary can always be checked.",
+      },
+      {
+        title: "Enrichment you can see and edit",
+        problem: "Auto-enriched data can be wrong or out of date, and silent changes break trust in a CRM.",
+        alt: "Overwrite contact fields automatically whenever new data is found.",
+        choice: "Enriched fields are labelled as enriched and stay editable like any other field.",
+        why: "People stay in charge of their own data. The label shows where each value came from.",
+      },
+    ],
+    features: [
+      { icon: "users", title: "Lead board", text: "Every lead on one board, grouped by lifecycle stage." },
+      { icon: "search", title: "Profile enrichment", text: "Adds professional data to contacts so profiles fill out faster." },
+      { icon: "spark", title: "Auto summaries", text: "A short summary of each contact’s history, above the full timeline." },
+      { icon: "tasks", title: "Activity tracking", text: "Notes and activity in one timeline for each contact." },
+      { icon: "star", title: "Lifecycle tagging", text: "Tags that mark where each contact stands, from lead to client." },
+    ],
+    system: [
+      { name: "Interface", items: ["React", "Next.js", "Board and timeline components"] },
+      { name: "Services", items: ["Node.js API", "Enrichment service"] },
+      { name: "AI", items: ["LLM API for summaries", "Prompt templates"] },
+      { name: "Data", items: ["PostgreSQL", "Activity log"] },
+    ],
+    outcome: [
+      "A live product at cognize.live",
+      "A lead board with lifecycle stages and tagging",
+      "Contact profiles with enrichment and an activity timeline",
+      "Auto summaries of each contact’s history",
+      "Front-end and back-end designed and built by me",
+    ],
+    learned: [
+      "A CRM gets lighter when you decide which questions it must answer and drop the rest.",
+      "AI summaries are trusted when the source is one scroll away.",
+    ],
+  },
+
+  "linksaver": {
+    tagline: "Save, organise and find every useful link without losing track",
+    summary: "LinkSaver is a smart resource manager, live at linksaver.in. People save links into nested collections, organise them by drag and drop, add notes and tags, and find anything with smart search, including from a Chrome extension. It is my own product: I designed it and built it with a React front-end and a Go back-end.",
+    seo: {
+      title: "LinkSaver: resource manager case study",
+      description: "LinkSaver is a smart resource manager with nested collections and a Chrome extension. Product designer and developer case study, built with React and Go.",
+      keywords: ["bookmark manager design", "resource manager app case study", "Chrome extension UX design", "React and Go product", "product designer and developer", "knowledge management tool UI"],
+    },
+    context: {
+      problem: "Useful links end up spread across browser bookmarks, chats, notes and open tabs. Bookmark folders get messy fast, and saved links are hard to find again when you need them. LinkSaver had to make saving quick and finding even quicker.",
+      audience: [
+        { who: "Developers", need: "Keep docs, snippets and references sorted by project." },
+        { who: "Designers", need: "Group inspiration and resources so they are easy to revisit." },
+        { who: "Students and researchers", need: "Organise sources by topic, with their own notes." },
+      ],
+      goals: ["Save a link in one step", "Organise with nested collections", "Find anything with smart search", "Show the shape of a library at a glance"],
+    },
+    approach: [
+      { title: "Defining the core loop", text: "I reduced the product to one loop: save, organise, find. Every feature had to make one of those steps faster." },
+      { title: "Designing the organiser", text: "I designed nested collections with drag and drop, pinning and tags. Notes sit on each link so context is saved with it." },
+      { title: "Adding the treemap and search", text: "I added a treemap view to show how a library is spread across collections. Smart search covers titles, notes and tags." },
+      { title: "Building and shipping", text: "I built the front-end in React, the back-end in Go and a Chrome extension for saving from any page. It is live at linksaver.in." },
+    ],
+    journey: { title: "From page to saved resource", steps: ["Find a useful page", "Save with the extension", "Drop into a collection", "Add notes and tags", "Find it with search"], key: 1 },
+    structure: {
+      root: "LinkSaver",
+      groups: [
+        { name: "Library", items: ["Collections", "Nested folders", "Pinned"] },
+        { name: "Link", items: ["Notes", "Tags", "Source page"] },
+        { name: "Views", items: ["List", "Treemap"] },
+        { name: "Search", items: ["Smart search", "Tag filters"] },
+        { name: "Extension", items: ["Quick save", "Choose collection"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Save first, organise later",
+        problem: "If saving asks for a folder, tags and notes every time, people stop saving.",
+        alt: "A full save form in the extension with every field required.",
+        choice: "The extension saves in one click to a default collection, with collection, notes and tags optional at the moment of saving.",
+        why: "Capture has to be instant or it doesn’t happen. Organising can wait for a calmer moment in the web app.",
+      },
+      {
+        title: "A treemap of the whole library",
+        problem: "Nested folders hide how big each area of a library has become.",
+        alt: "A plain folder tree with counts next to each name.",
+        choice: "I added a treemap view where each collection’s size shows how many resources it holds, and clicking one opens it.",
+        why: "It turns a deep tree into one picture. People see where their library is cluttered and where to tidy.",
+      },
+      {
+        title: "Drag and drop across nested collections",
+        problem: "Moving links between nested folders through menus takes several clicks and is easy to get wrong.",
+        alt: "A Move to menu with a folder picker on each link.",
+        choice: "Links and collections can be dragged anywhere in the tree, with clear drop targets at every level.",
+        why: "Direct moves make tidying a quick habit rather than a chore. The tree always shows where things will land.",
+      },
+    ],
+    features: [
+      { icon: "box", title: "Nested collections", text: "Folders inside folders, for libraries of any shape." },
+      { icon: "chart", title: "Treemap view", text: "See how a library is spread across collections." },
+      { icon: "search", title: "Smart search", text: "Find links by title, note or tag." },
+      { icon: "doc", title: "Notes, tags and pins", text: "Context and priority saved with each link." },
+      { icon: "link", title: "Chrome extension", text: "Save the page you are on in one click." },
+    ],
+    system: [
+      { name: "Interface", items: ["React", "Treemap visualisation", "Drag-and-drop tree"] },
+      { name: "Back-end", items: ["Go API", "Search"] },
+      { name: "Data", items: ["PostgreSQL", "Collections and tags"] },
+      { name: "Extension", items: ["Chrome extension", "Quick save"] },
+    ],
+    outcome: [
+      "A live product at linksaver.in",
+      "A web app with nested collections, drag and drop, notes, pinning and tags",
+      "A treemap view of the whole library",
+      "Smart search across saved resources",
+      "A Chrome extension for saving from any page",
+    ],
+    learned: [
+      "Capture and organisation are different moments. Designing them separately made both easier.",
+      "A visual overview like the treemap shows what no folder tree can: the shape of a collection.",
+    ],
+  },
+
+  "car-repair-booking-platform": {
+    tagline: "A premium body repair website that turns visitors into bookings staff can act on",
+    summary: "A website and bookings admin for a UK car body repair centre. The dark, premium website guides visitors to book a repair, and the admin gives staff each booking with an AI price estimate, photos, status and history in one place. I designed the website, the admin and the automated emails.",
+    seo: {
+      title: "Car Repair Booking Platform: UX case study",
+      description: "Car repair booking website and admin with AI price estimates. Freelance product designer case study: bookings staff review, call and update on one page.",
+      keywords: ["car repair booking website design", "automotive website UX case study", "booking admin dashboard design", "AI price estimate UX", "body shop booking system design", "service business website designer"],
+    },
+    context: {
+      problem: "People looking for body repair have usually just had damage they did not plan for, and they want to know the cost and how to get it fixed. For staff, a booking is only useful if it arrives with the details, photos and contact routes needed to quote and follow up. The platform had to make booking easy for customers and make every booking ready to act on.",
+      audience: [
+        { who: "Car owners with damage", need: "Find the right service and book a repair without a long back-and-forth." },
+        { who: "Insurance and fleet customers", need: "See that the centre handles claims and fleet work before they get in touch." },
+        { who: "Front-office staff", need: "Open a booking and have the photos, estimate and contact actions ready to use." },
+        { who: "Workshop managers", need: "See every booking’s status at a glance." },
+      ],
+      goals: ["Make Book now the obvious next step", "Give staff an early sense of each job’s cost", "Let staff act on a booking from one page", "Keep customers informed with automated emails"],
+    },
+    approach: [
+      { title: "Mapping the booking path", text: "I mapped how a visitor moves from a service to a booking, and how that booking reaches staff. Both sides had to work as one flow, not two separate products." },
+      { title: "Designing a premium website", text: "I designed a dark, premium website that presents body repair, paint and respray, dent removal, alloy wheel repair, insurance claims, fleet services, scratch repair and full restoration clearly. Book now and the phone number stay in the header on every page." },
+      { title: "Designing the bookings admin", text: "I designed the bookings list and booking detail around the question staff ask most: what needs doing next. The AI estimate, status chips, filters and activity timeline all serve that question." },
+      { title: "Emails and handover", text: "I designed the automated emails sent from the admin so customers hear back in a consistent voice. I handed over the website, admin and email designs with their states for the build." },
+    ],
+    journey: { title: "From damage to booked repair", steps: ["Choose a service", "Book with car photos", "AI estimates a price range", "Staff call or email", "Status moves to Completed"], key: 2 },
+    structure: {
+      root: "Car Repair Booking Platform",
+      groups: [
+        { name: "Website", items: ["Services", "Common questions", "Contact", "Book now"] },
+        { name: "Bookings", items: ["Bookings list", "Status and category filters", "Search"] },
+        { name: "Booking detail", items: ["Overview", "Customer details", "Car photos", "Activity timeline"] },
+        { name: "Actions", items: ["Change status", "Send email", "Make call", "Add comment"] },
+        { name: "Enquiries and emails", items: ["Contact enquiries", "Automated emails"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "AI estimate as a price range",
+        problem: "An estimate made before anyone has inspected the car can’t be exact. A single figure reads like a quote, and staff then have to walk it back.",
+        alt: "Show one £ figure as the AI estimate on each booking.",
+        choice: "I showed the AI estimate as a £ range in the bookings list and on the booking detail, clearly labelled as an AI estimate.",
+        why: "A range is honest about uncertainty and still tells staff the size of a job at a glance. The final price stays with the people who inspect the car.",
+      },
+      {
+        title: "Everything to act on one page",
+        problem: "To handle a booking, staff need the customer’s details, the car photos, the history and a way to get in touch. Spread across an inbox, a phone and a spreadsheet, that means switching tools for every job.",
+        alt: "A read-only booking record, with emails and calls handled in separate tools.",
+        choice: "The booking detail page holds the overview, customer details, car photos, an activity timeline with comments, a status control, and Send email and Make call buttons.",
+        why: "Staff can review a job, contact the customer and update the status without leaving the page. The timeline keeps the story of each job in one place for whoever picks it up next.",
+      },
+      {
+        title: "Book now always within reach",
+        problem: "Some visitors are ready to book the moment they land, while others want to ask a question first. A booking route hidden on a contact page loses both.",
+        alt: "A single contact form at the bottom of the site.",
+        choice: "Book now and the phone number sit in the header on every page, the services lead to booking, and Common questions answers doubts before they become reasons to leave.",
+        why: "Every visitor has a next step from anywhere on the site. The FAQs do the reassuring that a phone call would otherwise have to do.",
+      },
+    ],
+    features: [
+      { icon: "money", title: "AI price estimate", text: "Each booking shows an AI estimate as a £ range, so staff see the size of a job at once." },
+      { icon: "tasks", title: "Status at a glance", text: "Scheduled, In progress, Pending, Cancelled and Completed chips, with filters by status and category." },
+      { icon: "upload", title: "Car photos on file", text: "Photos sent with the booking sit on its detail page for staff to assess." },
+      { icon: "phone", title: "Call or email directly", text: "Send email and Make call sit on the booking, next to the customer’s details." },
+      { icon: "mail", title: "Automated emails", text: "Customers get consistent emails sent straight from the admin." },
+    ],
+    outcome: [
+      "A dark, premium website with services, Common questions and a contact page, and Book now with the phone number in the header",
+      "A bookings admin with sign-in, a bookings list showing AI estimate ranges and status chips, plus filters and search",
+      "A booking detail page with overview, customer details, car photos, activity timeline, status change, Send email and Make call",
+      "A Contact enquiries view alongside bookings",
+      "Automated email templates sent from the admin",
+    ],
+    learned: [
+      "When AI gives a price before a person has looked, a range is more honest and more useful than a single figure.",
+      "An admin tool earns its place when staff can finish a task on one page.",
+      "A premium look sets the expectation, but a visible Book now and phone number are what turn a visit into a booking.",
+    ],
+  },
+
+  "true-match": {
+    tagline: "Matchmaking built on verified profiles, curated daily matches and real conversation",
+    summary: "True-Match is a trust-first matchmaking app with verified profiles, daily curated matches and in-chat activities. It is for people who want fewer, better matches and safer conversations. I designed the mobile app’s flows and interface for iOS and Android.",
+    seo: {
+      title: "True-Match: dating app UX case study",
+      description: "True-Match is a trust-first matchmaking app with verified profiles. Freelance product designer case study: daily curated matches and in-chat activities.",
+      keywords: ["dating app UX case study", "matchmaking app design", "mobile app product designer", "profile verification UX", "trust and safety app design", "iOS and Android app design"],
+    },
+    context: {
+      problem: "Many dating apps reward endless swiping, which leads to fake profiles, shallow chats and fatigue. People want to know the other person is real and to have something to talk about. True-Match had to build trust from the first screen and keep conversations going past hello.",
+      audience: [
+        { who: "Serious daters", need: "Get fewer, better-suited matches instead of endless swiping." },
+        { who: "Safety-conscious users", need: "Know a profile is real before they start a chat." },
+        { who: "Quieter users", need: "Have easy ways to start and keep a conversation going." },
+      ],
+      goals: ["Make verification part of onboarding", "Limit matches to a curated daily set", "Help conversations start naturally", "Make trust visible on every profile"],
+    },
+    approach: [
+      { title: "Mapping the trust moments", text: "I mapped every moment where a user decides whether to trust someone: the profile, the first message and the first plan. Each one needed a visible signal." },
+      { title: "Designing verification into onboarding", text: "I placed profile verification inside sign-up rather than after it. The flow explains why it matters before asking for it." },
+      { title: "Designing daily matches and chat", text: "I designed the daily matches screen and a chat with built-in activities. Activities give two people something to do together, not just something to say." },
+      { title: "Handover for iOS and Android", text: "I prepared iOS and Android screens, states and components for development. Verification, empty and safety states were all drawn." },
+    ],
+    journey: { title: "From sign-up to first conversation", steps: ["Create a profile", "Verify your profile", "See today’s matches", "Start a chat", "Play an in-chat activity"], key: 1 },
+    structure: {
+      root: "True-Match",
+      groups: [
+        { name: "Onboarding", items: ["Profile set-up", "Verification", "Preferences"] },
+        { name: "Matches", items: ["Today’s matches", "Profile view", "Saved"] },
+        { name: "Chat", items: ["Conversations", "Activities", "Safety tools"] },
+        { name: "Profile", items: ["Edit profile", "Verified badge", "Settings"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Verification inside onboarding",
+        problem: "When verification is optional and comes after sign-up, many people skip it, and the badge ends up meaning little.",
+        alt: "Let people verify later from settings.",
+        choice: "Verification is a step in onboarding, framed as earning a verified badge that others will see.",
+        why: "When verification is the norm, the badge becomes a real signal. It also sets the tone: this app takes trust seriously.",
+      },
+      {
+        title: "A daily set, not an endless feed",
+        problem: "Unlimited swiping makes people judge fast and move on.",
+        alt: "An infinite stack of profiles to swipe through.",
+        choice: "Each day brings a small curated set of matches, with more room given to each profile.",
+        why: "A limit makes each match feel worth a look. People read profiles instead of flicking past them.",
+      },
+      {
+        title: "Activities inside the chat",
+        problem: "Many matches stall after the first hello because neither person knows what to say next.",
+        alt: "Suggested opening lines and nothing more.",
+        choice: "I designed in-chat activities that either person can start, giving both something to respond to.",
+        why: "Doing something together is easier than small talk. It moves a match towards a real conversation.",
+      },
+    ],
+    features: [
+      { icon: "shield", title: "Verified profiles", text: "A visible badge on profiles that have been verified." },
+      { icon: "heart", title: "Daily curated matches", text: "A short, considered set of matches each day." },
+      { icon: "game", title: "In-chat activities", text: "Light activities to break the ice inside a chat." },
+      { icon: "chat", title: "Focused conversations", text: "A calm chat that keeps attention on the person." },
+      { icon: "lock", title: "Safety tools", text: "Report, block and privacy controls always within reach." },
+    ],
+    outcome: [
+      "An onboarding flow with profile set-up and verification",
+      "Daily matches, profile view and chat screens for iOS and Android",
+      "In-chat activity designs and their states",
+      "Trust signals and safety states across the app",
+      "Components and hand-off files for development",
+    ],
+    learned: [
+      "Trust is built from small visible signals, repeated on every screen.",
+      "Limits can be a feature. Fewer matches made each one worth designing for.",
+    ],
+  },
+
+  "careloop": {
+    tagline: "A clean UI kit for building healthtech and eldercare apps faster",
+    summary: "CareLoop is a modern UI kit for founders, designers and developers building healthtech or eldercare apps. It is designed around people caring for ageing parents, with calm, accessible components for everyday care. I designed the kit and the example screens that show it in use.",
+    seo: {
+      title: "CareLoop: eldercare UI kit case study",
+      description: "CareLoop is a mobile UI kit for healthtech and eldercare apps. Freelance product designer case study: accessible components for people caring for parents.",
+      keywords: ["healthtech UI kit", "eldercare app design", "accessible mobile UI kit", "UI kit for health apps", "caregiver app UX", "healthcare product designer"],
+    },
+    context: {
+      problem: "Teams building eldercare apps often start from generic UI kits made for fitness or banking. Those kits rarely suit carers who are tired, busy and managing medicines, appointments and worries for someone else. CareLoop needed components that are calm, legible and ready for care-specific screens.",
+      audience: [
+        { who: "Founders", need: "Have a credible starting point to test an eldercare idea quickly." },
+        { who: "Designers", need: "Adapt accessible components without starting from scratch." },
+        { who: "Developers", need: "Work from consistent, well-named components that map cleanly to code." },
+        { who: "Carers", need: "Use screens that stay calm and easy to read under stress." },
+      ],
+      goals: ["Cover the core screens of a care app", "Meet accessibility basics by default", "Keep components easy to adapt", "Set a calm, warm visual tone"],
+    },
+    approach: [
+      { title: "Mapping the carer’s day", text: "I mapped what a person caring for an ageing parent keeps track of: medicines, appointments, notes and check-ins. Those tasks set the list of components and screens." },
+      { title: "Setting accessible foundations", text: "I set type sizes, contrast and touch targets with accessibility in mind before drawing any components. Colour is never the only way information is shown." },
+      { title: "Building the components", text: "I built cards, lists, reminders, forms and status elements as variants of a small set of base components. Each one has clear names and states." },
+      { title: "Composing example screens", text: "I combined the components into example care screens to show how the kit fits together. They give teams a head start, not a fixed template." },
+    ],
+    journey: { title: "A carer’s daily check", steps: ["Open today’s care plan", "Check medicine reminders", "Log a dose", "See upcoming appointments", "Add a care note"], key: 2 },
+    structure: {
+      root: "CareLoop",
+      groups: [
+        { name: "Foundations", items: ["Colour", "Type", "Spacing", "Icons"] },
+        { name: "Components", items: ["Cards", "Lists", "Forms", "Reminders"] },
+        { name: "Care patterns", items: ["Care plan", "Medicine tracker", "Appointments"] },
+        { name: "Example screens", items: ["Home", "Parent profile", "Care notes"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "Large type as the default",
+        problem: "Carers read on the go, often tired, and many eldercare apps are also used by older people themselves.",
+        alt: "Standard mobile type sizes with an optional larger setting.",
+        choice: "I set a larger base type size and generous touch targets across the kit, so accessible sizing is the starting point, not an option.",
+        why: "Teams rarely revisit defaults. Building accessibility into the base means every screen made with the kit starts readable.",
+      },
+      {
+        title: "Calm colours, clear alerts",
+        problem: "Health apps often use strong reds and alerts everywhere, which adds stress to an already stressful job.",
+        alt: "A bright, high-alert palette with red for every warning.",
+        choice: "I used a soft, warm palette for most of the interface and kept strong colour for real alerts, always paired with an icon and a label.",
+        why: "When everything shouts, nothing stands out. Saving strong colour for what matters keeps it meaningful.",
+      },
+      {
+        title: "Care-specific components in the kit",
+        problem: "Generic kits give buttons and cards but leave teams to design medicine reminders and care logs from scratch.",
+        alt: "A general-purpose kit with a health-themed colour palette.",
+        choice: "I included care-specific components, such as medicine reminders, appointment cards and care notes, built from the same base parts.",
+        why: "Those are the pieces every eldercare app needs. Having them in the kit takes the hardest part of a first version off a team’s plate.",
+      },
+    ],
+    features: [
+      { icon: "heart", title: "Care components", text: "Medicine reminders, appointment cards and care notes, ready to use." },
+      { icon: "layout", title: "Accessible foundations", text: "Type, contrast and touch targets set with accessibility in mind." },
+      { icon: "calendar", title: "Appointment patterns", text: "Cards and lists for upcoming visits and check-ups." },
+      { icon: "bell", title: "Gentle reminders", text: "Reminder styles that inform without alarming." },
+      { icon: "health", title: "Example screens", text: "Care screens that show how the kit fits together." },
+    ],
+    outcome: [
+      "A mobile UI kit with foundations, base components and care-specific components",
+      "Accessible defaults for type, contrast and touch targets",
+      "Example care screens built from the kit",
+      "Named components and variants ready for designers and developers",
+    ],
+    learned: [
+      "Accessibility is easiest when it is the default, not a setting.",
+      "A UI kit earns its place when it solves the domain’s awkward pieces, not just buttons and inputs.",
+    ],
+  },
+
+  "safe-bump": {
+    tagline: "Support for pregnancy and new motherhood, from tracking to community",
+    summary: "Safe Bump is a maternal health mobile app for pregnant women and new mothers. It brings health tracking, educational resources, an appointment scheduler and community support into one place. I designed the app’s flows and interface for iOS and Android.",
+    seo: {
+      title: "Safe Bump: maternal health app case study",
+      description: "Safe Bump is a maternal health app for pregnancy and new motherhood. Freelance product designer case study: tracking, learning, appointments and community.",
+      keywords: ["maternal health app design", "pregnancy app UX case study", "femtech product designer", "healthcare mobile app design", "mobile app designer for startups", "new mother app UI"],
+    },
+    context: {
+      problem: "Pregnant women and new mothers juggle check-ups, symptoms, advice from many sources and worries at odd hours. Most apps cover only one part, so information is split across tools and forums. Safe Bump had to bring these together without overwhelming someone who is already tired.",
+      audience: [
+        { who: "Expecting mothers", need: "Track their health and know what to expect at each stage." },
+        { who: "New mothers", need: "Get support with recovery and caring for a newborn." },
+        { who: "First-time parents", need: "Find reliable, plain information they can trust." },
+      ],
+      goals: ["Keep tracking quick and simple", "Make reliable information easy to find", "Bring appointments into the same app", "Offer support from other mothers"],
+    },
+    approach: [
+      { title: "Mapping the stages", text: "I mapped the journey from early pregnancy to the months after birth. Needs change at each stage, so the app had to change with them." },
+      { title: "Designing a stage-aware home", text: "I designed a home screen that shows what matters for the current stage: tracking, reminders and relevant reading. Everything else sits one tap away." },
+      { title: "Designing the core tools", text: "I designed health tracking, the appointment scheduler, learning content and the community space. Each uses the same calm patterns, so nothing feels like a separate app." },
+      { title: "Handover for iOS and Android", text: "I prepared screens, states and components for iOS and Android. Tone and wording for sensitive moments were set alongside the screens." },
+    ],
+    journey: { title: "A week in pregnancy", steps: ["Open this week’s view", "Log a health check", "Read stage guidance", "Book the next appointment", "Ask the community"], key: 0 },
+    structure: {
+      root: "Safe Bump",
+      groups: [
+        { name: "Home", items: ["This week", "Reminders", "Daily tips"] },
+        { name: "Track", items: ["Health log", "Symptoms", "History"] },
+        { name: "Learn", items: ["Articles", "By stage", "Saved"] },
+        { name: "Appointments", items: ["Calendar", "Upcoming", "Notes"] },
+        { name: "Community", items: ["Groups", "Questions", "My posts"] },
+      ],
+    },
+    decisions: [
+      {
+        title: "A home that follows the stage",
+        problem: "Needs in early pregnancy are very different from those in the weeks after birth.",
+        alt: "A fixed home with the same tiles for everyone.",
+        choice: "Home adapts to the user’s stage, showing the tracking, reminders and reading that fit that week.",
+        why: "People see what is relevant without searching. The app grows with them instead of feeling out of date.",
+      },
+      {
+        title: "Quick logs over long forms",
+        problem: "Tired users skip tracking when it feels like paperwork.",
+        alt: "Detailed health forms with many fields for each entry.",
+        choice: "I designed one-tap logs for common entries, with an optional note for detail.",
+        why: "Small, regular logs give a clearer picture than rare long ones. Detail is still there when it matters.",
+      },
+      {
+        title: "Community apart from medical guidance",
+        problem: "Advice from other mothers is comforting but can be mistaken for medical guidance.",
+        alt: "Mix community posts and articles in one feed.",
+        choice: "Community and learning are separate spaces with different styling, and health content is clearly marked as guidance.",
+        why: "Both matter, but they carry different weight. Keeping them apart helps people know which is which.",
+      },
+    ],
+    features: [
+      { icon: "baby", title: "Stage-aware home", text: "Shows what matters for this week of pregnancy or motherhood." },
+      { icon: "health", title: "Health tracking", text: "Quick logs for health checks and symptoms." },
+      { icon: "book", title: "Learning resources", text: "Educational content organised by stage." },
+      { icon: "calendar", title: "Appointment scheduler", text: "Book and keep track of check-ups in the app." },
+      { icon: "users", title: "Community support", text: "A space to ask questions and share with other mothers." },
+    ],
+    outcome: [
+      "User flows from pregnancy through the early months of motherhood",
+      "UI design for home, tracking, learning, appointments and community on iOS and Android",
+      "A calm visual style with clear, plain copy",
+      "Components and states ready for development",
+    ],
+    learned: [
+      "Designing for tired people means removing steps, not adding help text.",
+      "Health guidance and community content need different visual weight, even in the same app.",
+    ],
+  },
+};

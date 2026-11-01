@@ -1,0 +1,16 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/ringover", "destination": "/work/ringover", "permanent": true },
+    { "source": "/vyuu-ai", "destination": "/work/ai-governance-console", "permanent": true },
+    { "source": "/qrios-x", "destination": "/work/qriosx", "permanent": true },
+    { "source": "/ai-calls", "destination": "/work/ai-calls", "permanent": true },
+    { "source": "/soc-intelligence", "destination": "/work/agentic-soc-platform", "permanent": true },
+    { "source": "/home", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    { "source": "/img/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] }
+  ]
+}

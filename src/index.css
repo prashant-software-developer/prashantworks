@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 225 19% 12%;
+    --primary: 222 90% 54%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 60 8% 96%;
+    --muted: 60 8% 95%;
+    --muted-foreground: 225 8% 46%;
+    --border: 225 12% 89%;
+  }
+  * { @apply border-border; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-background font-sans text-body text-foreground antialiased; }
+  ::selection { background: hsl(var(--primary) / 0.15); }
+  h1, h2, h3 { font-weight: 400; text-wrap: balance; }
+  p { text-wrap: pretty; }
+  img { max-width: 100%; height: auto; }
+  :focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 4px; }
+}
+
+@layer components {
+  /* Layout rhythm, same as fynolabs.si */
+  .wrap { @apply mx-auto w-full max-w-[1440px] px-6 sm:px-8 md:px-12 lg:px-20 xl:px-24; }
+  .section-y { @apply py-28 md:py-40 lg:py-48; }
+  .eyebrow { @apply text-eyebrow uppercase text-muted-foreground; }
+  .display { @apply text-display font-light tracking-tight; }
+  .h-section { @apply text-section font-light tracking-tight; }
+  .row-link {
+    @apply flex min-h-14 items-center justify-between gap-6 border-b py-4 text-body text-foreground transition-[padding,color,border-color] duration-300 hover:border-foreground hover:pl-2;
+  }
+  .text-link { @apply inline-flex items-center gap-1.5 text-small uppercase tracking-widest transition-colors; }
+  .chip { @apply inline-flex items-center border px-3 py-1.5 text-xs text-muted-foreground; }
+  .shot { @apply block w-full border bg-secondary; }
+  .btn { @apply inline-flex min-h-[3.25rem] items-center justify-center gap-2.5 px-7 text-small font-medium transition-colors; }
+  .btn-primary { @apply btn bg-primary text-primary-foreground hover:bg-primary/90; }
+  .btn-ghost { @apply btn border text-foreground hover:border-foreground; }
+  /* faint blueprint dot grid behind drawings */
+  .blueprint-grid {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(hsl(var(--muted-foreground) / 0.28) 1px, transparent 1.5px);
+    background-size: 18px 18px; background-position: center;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 72%);
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 72%);
+  }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

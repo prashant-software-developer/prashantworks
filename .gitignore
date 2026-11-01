@@ -1,0 +1,8 @@
+node_modules
+dist
+dist-ssr
+.DS_Store
+*.local
+
+# Internal writing notes, not part of the site
+_notes/
