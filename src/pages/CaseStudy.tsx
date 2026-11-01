@@ -203,7 +203,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       {/* Problem and audience */}
       <section className="section-y border-t">
         <div className="wrap">
-          <div className="grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-x-20">
+          <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-x-20">
             <div className="lg:col-span-7">
               <p className="eyebrow flex items-center gap-3"><span className="text-primary">{pad(++n)}</span><span className="h-px w-8 bg-border" />The problem</p>
               <h2 className="h-section mt-6">What needed <span className="text-primary">solving</span></h2>
