@@ -12,10 +12,11 @@ const fitsFrame = (id: string) => {
   return !!m && Math.abs(m.w / m.h / (4 / 3) - 1) <= 0.05;
 };
 
-export function ProjectCard({ p }: { p: Project }) {
+/** image: show this screenshot framed instead of the cover (used where cards must match). */
+export function ProjectCard({ p, image }: { p: Project; image?: string }) {
   return (
     <Link to={`/work/${p.slug}`} className="group flex h-full flex-col">
-      {p.cover && fitsFrame(p.cover) ? <Shot id={p.cover} alt={`${p.title}: ${p.short}`} sizes="(min-width: 768px) 45vw, 90vw" /> : <CoverArt icon={p.icon} slug={p.slug} />}
+      {image ? <Shot id={image} framed alt={`${p.title}: ${p.short}`} sizes="(min-width: 768px) 45vw, 90vw" /> : p.cover && fitsFrame(p.cover) ? <Shot id={p.cover} alt={`${p.title}: ${p.short}`} sizes="(min-width: 768px) 45vw, 90vw" /> : <CoverArt icon={p.icon} slug={p.slug} />}
       <div className="mt-8 flex flex-1 items-start justify-between gap-8 border-b pb-8">
         <div>
           <p className="eyebrow">{kindLabel(p)} · {p.category}</p>

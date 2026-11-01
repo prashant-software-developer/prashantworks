@@ -38,6 +38,7 @@ export function Shot({
   sizes = "(min-width: 768px) 50vw, 100vw",
   mode = "full",
   eager = false,
+  framed = false,
   className = "",
 }: {
   id: string;
@@ -45,13 +46,15 @@ export function Shot({
   sizes?: string;
   mode?: "peek" | "full";
   eager?: boolean;
+  /** Always show the screen framed on the grey panel, never edge to edge. */
+  framed?: boolean;
   className?: string;
 }) {
   const loading = eager ? "eager" : "lazy";
   // Exactly-4:3 cover art already has its own background and device frame, so it fills the frame
   // instead of getting a second border and shadow. Case images (ids with a folder) are plain screens.
   const m = images[id];
-  const bleed = mode === "full" && !!m && m.w * 3 === m.h * 4 && !id.includes("/");
+  const bleed = !framed && mode === "full" && !!m && m.w * 3 === m.h * 4 && !id.includes("/");
   return (
     <div className={`relative aspect-[4/3] overflow-hidden bg-[hsl(225_20%_96%)] ${className}`}>
       {bleed ? (

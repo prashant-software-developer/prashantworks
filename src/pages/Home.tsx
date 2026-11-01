@@ -93,9 +93,16 @@ const prices = [
 export default function Home() {
   useTitle("", "Product engineer and founder of FynoLabs. I design, build and train AI products end to end. Book a free 30-minute call.");
   // The four strongest projects, all with real product shots.
-  const picks = ["ringover", "agentic-soc-platform", "ai-governance-console", "qriosx"]
-    .map((slug) => projects.find((p) => p.slug === slug))
-    .filter((p): p is (typeof projects)[number] => !!p);
+  // Same kind of image on every card: a plain app screen, framed on the grey panel.
+  const picks = [
+    { slug: "ringover", image: "98cce517ef" },
+    { slug: "agentic-soc-platform", image: "soc/02" },
+    { slug: "ai-governance-console", image: "b79b757600" },
+    { slug: "qriosx", image: "14ea830a66" },
+  ].flatMap(({ slug, image }) => {
+    const p = projects.find((x) => x.slug === slug);
+    return p ? [{ p, image }] : [];
+  });
 
   return (
     <>
@@ -193,7 +200,7 @@ export default function Home() {
         <div className="wrap">
           <SectionHead eyebrow="Selected work" heading={<>Products I've <span className="text-primary">shipped</span></>} aside={`Security, AI governance, coaching and booking platforms. ${projects.length} case studies in total.`} />
           <div className="mt-20 grid gap-x-12 gap-y-20 lg:gap-x-20 lg:gap-y-28 md:mt-28 lg:mt-32 md:grid-cols-2">
-            {picks.map((p) => <ProjectCard key={p.slug} p={p} />)}
+            {picks.map(({ p, image }) => <ProjectCard key={p.slug} p={p} image={image} />)}
           </div>
           <div className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link to="/work" className="btn-ghost">See all {projects.length} case studies</Link>
