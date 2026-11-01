@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { CompanyIcon } from "../components/CompanyIcon";
-import { GlyphTile } from "../components/Glyphs";
+import { Glyph } from "../components/Glyphs";
 import type { IconKey } from "../data/cases/types";
 import { BookButton, Closing, SectionHead } from "../components/Layout";
 import { Shot } from "../components/Shot";
@@ -149,19 +149,23 @@ export default function About() {
       <section className="section-y border-t">
         <div className="wrap">
           <SectionHead eyebrow="Skills" heading={<>What I <span className="text-primary">bring</span></>} />
-          <div className="mt-16 grid gap-px border bg-border sm:grid-cols-2 lg:grid-cols-5 md:mt-20">
+          <div className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 md:mt-20 lg:grid-cols-5">
             {skills.map((s, i) => (
-              <div key={s.title} className="bg-background p-8">
-                <GlyphTile icon={SKILL_ICONS[i % SKILL_ICONS.length]} tone={i === 0 ? "solid" : "soft"} />
-                <h3 className="mt-6 text-title">{s.title}</h3>
-                <ul className="mt-4 space-y-2 text-muted-foreground">
-                  {s.items.map((x) => <li key={x}>{x}</li>)}
-                </ul>
+              <div key={s.title} className={`pt-6 ${i === 0 ? "border-t-2 border-primary" : "border-t"}`}>
+                <Glyph icon={SKILL_ICONS[i % SKILL_ICONS.length]} className="h-6 w-6 text-foreground" />
+                <h3 className="mt-5 text-xl font-light tracking-tight">{s.title}</h3>
+                <p className="mt-3 leading-relaxed text-muted-foreground">
+                  {s.items.map((x, j) => (
+                    <span key={x}>
+                      <span className="whitespace-nowrap">{x}{j < s.items.length - 1 ? " ·" : ""}</span>{" "}
+                    </span>
+                  ))}
+                </p>
               </div>
             ))}
           </div>
 
-          <div className="mt-16 grid gap-10 border-t pt-10 md:grid-cols-2 md:gap-x-20">
+          <div className="mt-20 grid gap-10 border-t pt-10 md:grid-cols-2 md:gap-x-20">
             <div className="flex gap-5">
               <CompanyIcon company="IIIT Sonepat" />
               <div>
