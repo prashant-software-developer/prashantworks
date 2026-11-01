@@ -17,11 +17,11 @@ export function ProjectCard({ p, image }: { p: Project; image?: string }) {
   return (
     <Link to={`/work/${p.slug}`} className="group flex h-full flex-col">
       {image ? <Shot id={image} framed alt={`${p.title}: ${p.short}`} sizes="(min-width: 768px) 45vw, 90vw" /> : p.cover && fitsFrame(p.cover) ? <Shot id={p.cover} alt={`${p.title}: ${p.short}`} sizes="(min-width: 768px) 45vw, 90vw" /> : <CoverArt icon={p.icon} slug={p.slug} />}
-      <div className="mt-8 flex flex-1 items-start justify-between gap-8 border-b pb-8">
+      <div className="mt-5 flex flex-1 items-start justify-between gap-8 border-b pb-6 md:mt-8 md:pb-8">
         <div>
-          <p className="eyebrow">{kindLabel(p)} · {p.category}</p>
-          <h3 className="mt-4 text-title">{p.title}</h3>
-          <p className="mt-2 text-body-lg text-muted-foreground">{p.short}</p>
+          <p className="eyebrow text-[0.625rem] md:text-eyebrow">{kindLabel(p)} · {p.category}</p>
+          <h3 className="mt-2 text-base md:mt-4 md:text-title">{p.title}</h3>
+          <p className="mt-1 text-small text-muted-foreground md:mt-2 md:text-body-lg">{p.short}</p>
         </div>
       </div>
     </Link>

@@ -133,8 +133,8 @@ function Footer() {
   const a = "block text-muted-foreground transition-colors hover:text-foreground";
   return (
     <footer>
-      <div className="wrap grid gap-12 pb-16 pt-8 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-20 lg:pb-20 lg:pt-10">
-        <div className="lg:col-span-6">
+      <div className="wrap grid grid-cols-2 gap-x-8 gap-y-12 pb-16 pt-8 sm:grid-cols-3 lg:grid-cols-12 lg:gap-x-20 lg:pb-20 lg:pt-10">
+        <div className="col-span-2 sm:col-span-3 lg:col-span-6">
           <p className="text-2xl font-light tracking-tight">Prashant Kumar Singh</p>
           <p className="mt-3 text-small text-muted-foreground">Product engineer & founder of FynoLabs · {contact.location}</p>
           <Link to="/book" className="text-link mt-8 text-primary">Book a free call</Link>

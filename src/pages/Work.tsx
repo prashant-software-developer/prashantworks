@@ -57,7 +57,7 @@ export default function Work() {
               ))}
             </div>
           </div>
-          <div className="mt-12 grid gap-x-10 gap-y-20 lg:gap-x-14 lg:gap-y-24 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-12 md:gap-x-10 md:gap-y-20 lg:grid-cols-3 lg:gap-x-14 lg:gap-y-24">
             {list.map((p) => <ProjectCard key={p.slug} p={p} />)}
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function Work() {
       <section className="section-y border-t">
         <div className="wrap">
           <SectionHead eyebrow="Own products" heading={<>Built and run <span className="text-primary">by me</span></>} aside="Products I designed, coded and launched myself." />
-          <div className="mt-16 grid gap-x-10 gap-y-20 lg:gap-x-14 lg:gap-y-24 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-16 grid grid-cols-2 gap-x-4 gap-y-12 md:gap-x-10 md:gap-y-20 lg:grid-cols-4 lg:gap-x-14 lg:gap-y-24">
             {own.map((p) => <ProjectCard key={p.slug} p={p} />)}
           </div>
         </div>

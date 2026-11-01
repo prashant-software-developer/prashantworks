@@ -39,9 +39,9 @@ function DecisionBlock({ d, i, seed }: { d: Decision; i: number; seed: number })
         <p className="mt-5 text-muted-foreground">{d.problem}</p>
       </div>
       <div className="lg:col-span-8">
-        <div className="relative grid gap-10 sm:grid-cols-2 sm:gap-14">
+        <div className="relative grid grid-cols-2 gap-5 sm:gap-14">
           <div className="border-t pt-6">
-            <div className="bg-[hsl(225_20%_97.5%)] px-10 py-8"><div className="mx-auto max-w-[10rem] opacity-70"><DecisionSketch seed={seed + i} chosen={false} /></div></div>
+            <div className="bg-[hsl(225_20%_97.5%)] px-4 py-5 md:px-10 md:py-8"><div className="mx-auto max-w-[10rem] opacity-70"><DecisionSketch seed={seed + i} chosen={false} /></div></div>
             <p className="eyebrow mt-6 flex items-center gap-2">
               <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
               Considered
@@ -49,7 +49,7 @@ function DecisionBlock({ d, i, seed }: { d: Decision; i: number; seed: number })
             <p className="mt-3 text-muted-foreground">{d.alt}</p>
           </div>
           <div className="border-t-2 border-primary pt-6">
-            <div className="bg-[hsl(225_20%_97.5%)] px-10 py-8"><div className="mx-auto max-w-[10rem]"><DecisionSketch seed={seed + i} chosen /></div></div>
+            <div className="bg-[hsl(225_20%_97.5%)] px-4 py-5 md:px-10 md:py-8"><div className="mx-auto max-w-[10rem]"><DecisionSketch seed={seed + i} chosen /></div></div>
             <p className="eyebrow mt-6 flex items-center gap-2 text-primary">
               <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>
               Chosen
@@ -115,9 +115,9 @@ function ChapterBlock({ c, i, open }: { c: Chapter; i: number; open: (key: strin
 
 function StructureTree({ s }: { s: NonNullable<CaseContent["structure"]> }) {
   return (
-    <div className={`grid border-t sm:grid-cols-2 ${s.groups.length >= 5 ? "lg:grid-cols-5" : s.groups.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}>
+    <div className={`grid grid-cols-2 border-t ${s.groups.length >= 5 ? "lg:grid-cols-5" : s.groups.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}>
       {s.groups.map((g, i) => (
-        <div key={g.name} className={`border-b py-8 lg:border-b-0 lg:py-10 ${i % 2 ? "sm:border-l sm:pl-8" : "sm:pr-8"} ${i % Math.min(s.groups.length, 5) ? "lg:border-l lg:pl-8" : "lg:border-l-0 lg:pl-0"}`}>
+        <div key={g.name} className={`border-b py-8 lg:border-b-0 lg:py-10 ${i % 2 ? "border-l pl-5 md:pl-8" : "pr-5 md:pr-8"} ${i % Math.min(s.groups.length, 5) ? "lg:border-l lg:pl-8" : "lg:border-l-0 lg:pl-0"}`}>
           <p className={`eyebrow ${i === 0 ? "text-primary" : ""}`}>{g.name}</p>
           <ul className="mt-6 space-y-3">
             {g.items.map((it) => <li key={it} className="text-body-lg">{it}</li>)}
@@ -184,7 +184,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
             )}
           </div>
 
-          <dl className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+          <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-8 md:gap-x-10 lg:grid-cols-4">
             {[
               { k: "Role", v: p.role },
               { k: "Type", v: p.kind === "inhouse" ? "In-house, full-time" : p.kind === "own" ? "My own product" : "Freelance" },
