@@ -203,10 +203,13 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       {/* Problem and audience */}
       <section className="section-y border-t">
         <div className="wrap">
-          <Head n={++n} eyebrow="The problem" title={<>What needed <span className="text-primary">solving</span></>} />
-          <div className="mt-12 grid items-center gap-12 lg:grid-cols-12 lg:gap-x-20">
-            <p className="text-lg font-light leading-relaxed md:text-xl md:leading-relaxed lg:col-span-7">{c.context.problem}</p>
-            <div className="bg-[hsl(225_20%_97%)] p-6 md:p-10 lg:col-span-5">
+          <div className="grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-x-20">
+            <div className="lg:col-span-7">
+              <p className="eyebrow flex items-center gap-3"><span className="text-primary">{pad(++n)}</span><span className="h-px w-8 bg-border" />The problem</p>
+              <h2 className="h-section mt-6">What needed <span className="text-primary">solving</span></h2>
+              <p className="mt-10 text-lg font-light leading-relaxed md:text-xl md:leading-relaxed">{c.context.problem}</p>
+            </div>
+            <div className="mx-auto w-full max-w-md bg-[hsl(225_20%_97%)] px-6 py-4 lg:col-span-5 lg:max-w-none">
               <AudienceArt icon={p.icon} count={c.context.audience.length} />
             </div>
           </div>
