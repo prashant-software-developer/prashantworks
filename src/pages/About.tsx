@@ -149,12 +149,12 @@ export default function About() {
       <section className="section-y border-t">
         <div className="wrap">
           <SectionHead eyebrow="Skills" heading={<>What I <span className="text-primary">bring</span></>} />
-          <div className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 md:mt-20 lg:grid-cols-5">
+          <div className="mt-16 grid gap-x-12 gap-y-14 sm:grid-cols-2 md:mt-20 lg:grid-cols-3 lg:gap-x-16 lg:gap-y-16">
             {skills.map((s, i) => (
-              <div key={s.title} className={`pt-6 ${i === 0 ? "border-t-2 border-primary" : "border-t"}`}>
+              <div key={s.title} className={`pt-8 ${i === 0 ? "border-t-2 border-primary" : "border-t"}`}>
                 <Glyph icon={SKILL_ICONS[i % SKILL_ICONS.length]} className="h-6 w-6 text-foreground" />
-                <h3 className="mt-5 text-xl font-light tracking-tight">{s.title}</h3>
-                <p className="mt-3 leading-relaxed text-muted-foreground">
+                <h3 className="mt-6 text-2xl font-light tracking-tight">{s.title}</h3>
+                <p className="mt-4 text-body-lg leading-relaxed text-muted-foreground">
                   {s.items.map((x, j) => (
                     <span key={x}>
                       <span className="whitespace-nowrap">{x}{j < s.items.length - 1 ? " ·" : ""}</span>{" "}
@@ -163,21 +163,12 @@ export default function About() {
                 </p>
               </div>
             ))}
-          </div>
-
-          <div className="mt-20 grid gap-10 border-t pt-10 md:grid-cols-2 md:gap-x-20">
-            <div className="flex gap-5">
-              <CompanyIcon company="IIIT Sonepat" />
-              <div>
-                <p className="eyebrow">Education</p>
-                <p className="mt-3 text-title">B.Tech, Computer Science</p>
-                <p className="mt-1 text-muted-foreground">IIIT Sonepat · 2021 – 2025 · 8.5 CGPA</p>
-              </div>
-            </div>
-            <div>
-              <p className="eyebrow">Languages</p>
-              <p className="mt-3 text-title">English and Hindi</p>
-              <p className="mt-1 text-muted-foreground">Professional English · native Hindi</p>
+            <div className="border-t pt-8">
+              <Glyph icon="cap" className="h-6 w-6 text-foreground" />
+              <h3 className="mt-6 text-2xl font-light tracking-tight">Education</h3>
+              <p className="mt-4 text-body-lg leading-relaxed text-muted-foreground">
+                B.Tech, Computer Science · IIIT Sonepat, <span className="whitespace-nowrap">2021–2025</span> · 8.5 CGPA · English and Hindi
+              </p>
             </div>
           </div>
         </div>
