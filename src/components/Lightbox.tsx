@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 export function Lightbox({ srcs, index, onClose, onIndex }: { srcs: string[]; index: number | null; onClose: () => void; onIndex: (i: number) => void }) {
   useEffect(() => {
@@ -15,7 +16,8 @@ export function Lightbox({ srcs, index, onClose, onIndex }: { srcs: string[]; in
 
   if (index === null) return null;
   const btn = "absolute top-1/2 -translate-y-1/2 flex h-11 w-11 items-center justify-center bg-background/90 border text-foreground hover:text-primary";
-  return (
+  // Rendered on <body>: the page-in animation on <main> would otherwise make "fixed" relative to the page, not the screen.
+  return createPortal(
     <div role="dialog" aria-modal="true" aria-label="Image viewer" className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/85 p-4 md:p-12" onClick={onClose}>
       <img src={srcs[index]} alt="" className="max-h-full max-w-full object-contain shadow-2xl" onClick={(e) => e.stopPropagation()} />
       <button aria-label="Close" className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center border bg-background/90 hover:text-primary" onClick={onClose}>
@@ -32,6 +34,7 @@ export function Lightbox({ srcs, index, onClose, onIndex }: { srcs: string[]; in
           <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-background/80">{index + 1} / {srcs.length}</p>
         </>
       )}
-    </div>
+    </div>,
+    document.body,
   );
 }
