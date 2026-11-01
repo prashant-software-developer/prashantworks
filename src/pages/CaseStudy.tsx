@@ -364,28 +364,32 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       <section className="section-y border-t">
         <div className="wrap">
           <Head n={++n} eyebrow="Outcome" title={<>What was <span className="text-primary">delivered</span></>} />
-          <ul className={`mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 ${COLS[Math.min(c.outcome.length, 5)]}`}>
-            {c.outcome.map((o) => (
-              <li key={o} className="border-t pt-5">
-                <svg viewBox="0 0 16 16" className="h-4 w-4 text-primary" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>
-                <p className="mt-4">{o}</p>
-              </li>
-            ))}
-          </ul>
-
-          {c.learned.length > 0 && (
-            <div className="mt-20 md:mt-28">
-              <p className="eyebrow">What I learned</p>
-              <div className={`mt-6 grid gap-x-10 gap-y-10 ${c.learned.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
-                {c.learned.map((l, i) => (
-                  <div key={l} className="border-t pt-6">
-                    <p className="eyebrow text-primary">{pad(i + 1)}</p>
-                    <p className="mt-4 text-xl font-light leading-snug md:text-2xl">{l}</p>
-                  </div>
+          <div className="mt-14 grid gap-16 lg:grid-cols-2 lg:gap-x-20">
+            <div>
+              <p className="eyebrow">Delivered</p>
+              <ul className="mt-6 border-t">
+                {c.outcome.map((o) => (
+                  <li key={o} className="flex gap-4 border-b py-5 text-body-lg">
+                    <svg viewBox="0 0 16 16" className="mt-1.5 h-4 w-4 shrink-0 text-primary" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>
+                    {o}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-          )}
+            {c.learned.length > 0 && (
+              <div>
+                <p className="eyebrow">What I learned</p>
+                <ol className="mt-6 border-t">
+                  {c.learned.map((l, i) => (
+                    <li key={l} className="flex gap-4 border-b py-5">
+                      <span className="eyebrow mt-1.5 w-4 shrink-0 text-primary">{pad(i + 1)}</span>
+                      <p className="text-body-lg">{l}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
