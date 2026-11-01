@@ -132,8 +132,8 @@ function Footer() {
   const col = "space-y-3 text-small";
   const a = "block text-muted-foreground transition-colors hover:text-foreground";
   return (
-    <footer className="border-t">
-      <div className="wrap grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-20 lg:py-20">
+    <footer>
+      <div className="wrap grid gap-12 pb-16 pt-8 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-20 lg:pb-20 lg:pt-10">
         <div className="lg:col-span-6">
           <p className="text-2xl font-light tracking-tight">Prashant Kumar Singh</p>
           <p className="mt-3 text-small text-muted-foreground">Product engineer & founder of FynoLabs · {contact.location}</p>
@@ -161,9 +161,11 @@ function Footer() {
           <a href={contact.cv} {...ext} className={a}>CV</a>
         </div>
       </div>
-      <div className="wrap flex flex-col justify-between gap-2 border-t py-6 pb-24 text-eyebrow uppercase text-muted-foreground sm:flex-row lg:pb-6">
+      <div className="wrap pb-24 lg:pb-8">
+        <div className="flex flex-col justify-between gap-2 border-t pt-6 text-eyebrow uppercase text-muted-foreground sm:flex-row">
         <span>© {new Date().getFullYear()} Prashant Kumar Singh</span>
         <span>Designed and built by me</span>
+        </div>
       </div>
     </footer>
   );
