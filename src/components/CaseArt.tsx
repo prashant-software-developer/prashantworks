@@ -114,6 +114,19 @@ export function HeroScene({ icon, slug, chips }: { icon: IconKey; slug: string; 
 
 /* ---------- Who it's for: audiences orbit the product ---------- */
 
+/** A small person mark for an audience group; the first group is the primary user, in solid blue. */
+export function PersonaMark({ index }: { index: number }) {
+  const lead = index === 0;
+  return (
+    <svg viewBox="0 0 48 48" className="h-12 w-12" fill="none" aria-hidden="true">
+      <rect x="0.5" y="0.5" width="47" height="47" className={lead ? "fill-primary stroke-primary" : "fill-[hsl(225_20%_96%)] stroke-border"} />
+      <circle cx="24" cy="19" r="6" className={lead ? "stroke-primary-foreground" : "stroke-foreground"} strokeWidth="1.4" />
+      <path d="M13 37c1.5-6 6-9 11-9s9.5 3 11 9" className={lead ? "stroke-primary-foreground" : "stroke-foreground"} strokeWidth="1.4" />
+      {!lead && <rect x={30 + (index % 3) * 2} y="9" width="5" height="5" className="fill-primary" />}
+    </svg>
+  );
+}
+
 export function AudienceArt({ icon, count }: { icon: IconKey; count: number }) {
   const id = uid();
   const W = 420, H = 320, cx = 210, cy = 160;

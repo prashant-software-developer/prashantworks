@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { DecisionSketch, HeroScene, JourneyFlow, seedOf, StackArt } from "../components/CaseArt";
+import { AudienceArt, DecisionSketch, HeroScene, JourneyFlow, PersonaMark, seedOf, StackArt } from "../components/CaseArt";
 import { GlyphTile } from "../components/Glyphs";
 import { Closing } from "../components/Layout";
 import { Lightbox } from "../components/Lightbox";
@@ -204,14 +204,20 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       <section className="section-y border-t">
         <div className="wrap">
           <Head n={++n} eyebrow="The problem" title={<>What needed <span className="text-primary">solving</span></>} />
-          <p className="mt-12 max-w-3xl text-lg font-light leading-relaxed md:text-xl md:leading-relaxed">{c.context.problem}</p>
+          <div className="mt-12 grid items-center gap-12 lg:grid-cols-12 lg:gap-x-20">
+            <p className="text-lg font-light leading-relaxed md:text-xl md:leading-relaxed lg:col-span-7">{c.context.problem}</p>
+            <div className="bg-[hsl(225_20%_97%)] p-6 md:p-10 lg:col-span-5">
+              <AudienceArt icon={p.icon} count={c.context.audience.length} />
+            </div>
+          </div>
 
           <div className="mt-14 md:mt-16">
             <p className="eyebrow">Who it’s for</p>
             <ul className={`mt-5 grid gap-x-10 gap-y-8 border-t pt-8 ${c.context.audience.length === 3 ? "sm:grid-cols-3" : `sm:grid-cols-2 ${COLS[Math.min(c.context.audience.length, 5)]}`}`}>
-              {c.context.audience.map((a) => (
+              {c.context.audience.map((a, i) => (
                 <li key={a.who}>
-                  <p className="text-title">{a.who}</p>
+                  <PersonaMark index={i} />
+                  <p className="mt-5 text-title">{a.who}</p>
                   <p className="mt-2 text-muted-foreground">{a.need}</p>
                 </li>
               ))}
