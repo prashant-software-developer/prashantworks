@@ -267,13 +267,185 @@ export function DecisionArt({ seed }: { seed: number }) {
   );
 }
 
-/** One side of a decision: the considered layout (grey) or the chosen one (with its blue focus). */
-export function DecisionSketch({ seed, chosen }: { seed: number; chosen: boolean }) {
+/* ---------- Decision sketches: one small scene per kind of decision ---------- */
+
+export type SketchKind = "chat" | "list" | "score" | "steps" | "path" | "cards" | "calendar" | "focus";
+
+/** Picks a sketch from the decision's own words, so each one shows what was actually chosen. */
+/** used: kinds already drawn on this page, so a page never shows the same sketch twice. */
+export function sketchKind(text: string, used: Set<SketchKind> = new Set()): SketchKind {
+  const t = text.toLowerCase();
+  const has = (...w: string[]) => w.some((x) => t.includes(x));
+  const rules: [SketchKind, string[]][] = [
+    ["chat", ["assistant", "chat", "ask ", "conversation", "copilot", "answers"]],
+    ["path", ["sprint", "journey", "level", "streak", "progress", "milestone", "path", "stage"]],
+    ["steps", ["step", "wizard", "onboarding", "one question", "guided", "flow", "intake"]],
+    ["score", ["score", "metric", "kpi", "analytics", "chart", "dashboard", "insight", "figure", "leaderboard"]],
+    ["calendar", ["calendar", "schedule", "slot", "week", "appointment", "booking"]],
+    ["cards", ["card", "tile", "grid", "gallery", "feed", "journal"]],
+    ["list", ["list", "queue", "table", "inbox", "priorit", "rows", "log"]],
+  ];
+  const match = rules.filter(([, w]) => has(...w)).map(([k]) => k).find((k) => !used.has(k));
+  const pick = match ?? (used.has("focus") ? (["cards", "list", "steps", "score"] as SketchKind[]).find((k) => !used.has(k)) ?? "focus" : "focus");
+  used.add(pick);
+  return pick;
+}
+
+export function DecisionSketch({ kind, chosen }: { kind: SketchKind; chosen: boolean }) {
   const id = uid();
+  const ln = chosen ? "stroke-foreground" : "stroke-muted-foreground";
+  const op = chosen ? 0.8 : 0.45;
+  const bar = (x: number, y: number, w: number, hot = false, h = 7) => (
+    <rect x={x} y={y} width={w} height={h} rx={2} className={hot ? "fill-primary" : "fill-muted-foreground"} fillOpacity={hot ? 1 : 0.22} />
+  );
+  const hatch = (x: number, y: number, w: number, h: number) => (
+    <rect x={x} y={y} width={w} height={h} fill={`url(#${id}h)`} className={ln} strokeOpacity={op * 0.7} />
+  );
+  const dim = "fill-background stroke-muted-foreground";
+  let body: JSX.Element;
+  switch (kind) {
+    case "chat":
+      body = chosen ? (
+        <>
+          {hatch(12, 28, 104, 44)}{bar(12, 82, 90)}{bar(12, 96, 70)}{bar(12, 110, 84)}
+          <rect x={126} y={26} width={64} height={104} rx={5} className="fill-background stroke-primary" strokeWidth="1.25" />
+          <rect x={134} y={36} width={40} height={14} rx={7} className="fill-muted-foreground" fillOpacity={0.2} />
+          <rect x={142} y={56} width={40} height={22} rx={7} className="fill-primary" />
+          <rect x={134} y={84} width={34} height={14} rx={7} className="fill-muted-foreground" fillOpacity={0.2} />
+          <rect x={132} y={112} width={52} height={10} rx={5} className="stroke-primary" strokeWidth="1" />
+        </>
+      ) : (
+        <>
+          {[0, 1, 2].map((k) => <rect key={k} x={k % 2 ? 90 : 20} y={30 + k * 30} width={90} height={22} rx={8} className="fill-muted-foreground" fillOpacity={0.18} />)}
+          <rect x={20} y={118} width={160} height={12} rx={6} className={ln} strokeOpacity={op} />
+        </>
+      );
+      break;
+    case "list":
+      body = chosen ? (
+        <>
+          {[0, 1, 2].map((k) => (
+            <g key={k}>
+              <rect x={14} y={30 + k * 34} width={172} height={26} rx={4} className={k === 0 ? "fill-background stroke-primary" : dim} strokeOpacity={k === 0 ? 1 : 0.35} strokeWidth="1.1" />
+              <circle cx={28} cy={43 + k * 34} r={5} className={k === 0 ? "fill-primary" : "fill-muted-foreground"} fillOpacity={k === 0 ? 1 : 0.3} />
+              {bar(40, 40 + k * 34, k === 0 ? 90 : 70, k === 0)}
+            </g>
+          ))}
+        </>
+      ) : (
+        <>{Array.from({ length: 8 }, (_, k) => <g key={k}>{bar(14, 28 + k * 13, 40)}{bar(60, 28 + k * 13, 60)}{bar(126, 28 + k * 13, 30)}{bar(162, 28 + k * 13, 24)}</g>)}</>
+      );
+      break;
+    case "score":
+      body = chosen ? (
+        <>
+          <circle cx={62} cy={78} r={34} className="stroke-muted-foreground" strokeOpacity={0.2} strokeWidth="8" />
+          <path d="M62 44a34 34 0 1 1 -32 46" className="stroke-primary" strokeWidth="8" strokeLinecap="round" />
+          <rect x={50} y={72} width={24} height={10} rx={2} className="fill-foreground" fillOpacity={0.8} />
+          {[0, 1, 2].map((k) => <g key={k}>{bar(116, 46 + k * 22, 70 - k * 18, k === 0, 9)}</g>)}
+          <path d="M98 78h12" className="stroke-primary" strokeDasharray="2 3" />
+        </>
+      ) : (
+        <>
+          {[0, 1, 2, 3, 4, 5].map((k) => {
+            const x = 14 + (k % 3) * 60, y = 28 + Math.floor(k / 3) * 54;
+            return (
+              <g key={k}>
+                <rect x={x} y={y} width={52} height={46} rx={3} className={ln} strokeOpacity={op * 0.8} />
+                {[0, 1, 2, 3].map((b) => <rect key={b} x={x + 8 + b * 10} y={y + 36 - (((k + b) % 4) + 1) * 6} width={6} height={(((k + b) % 4) + 1) * 6} className="fill-muted-foreground" fillOpacity={0.25} />)}
+              </g>
+            );
+          })}
+        </>
+      );
+      break;
+    case "steps":
+      body = chosen ? (
+        <>
+          <path d="M67 34h16M93 34h16M119 34h16" className="stroke-muted-foreground" strokeOpacity={0.35} />
+          {[0, 1, 2, 3].map((k) => <circle key={k} cx={62 + k * 26} cy={34} r={5} className={k <= 1 ? "fill-primary" : dim} strokeOpacity={0.5} />)}
+          <rect x={40} y={50} width={120} height={64} rx={5} className="fill-background stroke-foreground" strokeOpacity={0.6} />
+          {bar(52, 62, 80)}
+          <rect x={52} y={78} width={96} height={12} rx={3} className="stroke-muted-foreground" strokeOpacity={0.4} />
+          <rect x={110} y={98} width={38} height={10} rx={3} className="fill-primary" />
+        </>
+      ) : (
+        <>{Array.from({ length: 7 }, (_, k) => <g key={k}>{bar(20, 28 + k * 15, 40)}<rect x={70} y={26 + k * 15} width={110} height={10} rx={2} className="stroke-muted-foreground" strokeOpacity={0.35} /></g>)}</>
+      );
+      break;
+    case "path":
+      body = chosen ? (
+        <>
+          <path d="M24 116 C 60 116, 60 80, 96 80 S 132 44, 172 40" className="stroke-muted-foreground" strokeOpacity={0.35} strokeWidth="1.5" strokeDasharray="3 4" />
+          <path d="M24 116 C 60 116, 60 80, 96 80" className="stroke-primary" strokeWidth="2" />
+          <circle cx={24} cy={116} r={5} className="fill-primary" />
+          <circle cx={58} cy={103} r={5} className="fill-primary" />
+          <rect x={86} y={70} width={20} height={20} rx={4} className="fill-primary" />
+          <circle cx={134} cy={57} r={5} className={dim} strokeOpacity={0.5} />
+          <circle cx={172} cy={40} r={5} className={dim} strokeOpacity={0.5} />
+          <rect x={150} y={22} width={40} height={10} rx={3} className="stroke-primary" strokeWidth="1" />
+        </>
+      ) : (
+        <>
+          {[0, 1, 2, 3].map((k) => (
+            <g key={k}>
+              {bar(16, 30 + k * 26, 70)}
+              <rect x={96} y={31 + k * 26} width={88} height={6} rx={3} className="fill-muted-foreground" fillOpacity={0.15} />
+              <rect x={96} y={31 + k * 26} width={[60, 30, 10, 0][k]} height={6} rx={3} className="fill-muted-foreground" fillOpacity={0.35} />
+            </g>
+          ))}
+        </>
+      );
+      break;
+    case "cards":
+      body = chosen ? (
+        <>
+          {[0, 1, 2, 3].map((k) => {
+            const x = 16 + (k % 2) * 88, y = 28 + Math.floor(k / 2) * 52;
+            return (
+              <g key={k}>
+                <rect x={x} y={y} width={80} height={44} rx={5} className={k === 0 ? "fill-primary" : dim} strokeOpacity={0.4} />
+                {k === 0 ? <rect x={x + 8} y={y + 10} width={40} height={7} rx={2} className="fill-primary-foreground" /> : <>{bar(x + 8, y + 10, 40)}{bar(x + 8, y + 24, 56)}</>}
+              </g>
+            );
+          })}
+        </>
+      ) : (
+        <>{[168, 150, 160, 120, 168, 140, 160, 90].map((w, k) => <g key={k}>{bar(16, 28 + k * 13, w)}</g>)}</>
+      );
+      break;
+    case "calendar":
+      body = chosen ? (
+        <>
+          {[0, 1, 2, 3, 4].map((c) => <path key={c} d={`M${20 + c * 34} 30v96`} className="stroke-muted-foreground" strokeOpacity={0.2} />)}
+          {[0, 1, 2, 3, 4].map((c) => <g key={c}>{bar(24 + c * 34, 30, 22)}</g>)}
+          <rect x={56} y={48} width={30} height={28} rx={3} className="fill-primary" />
+          <rect x={124} y={84} width={30} height={20} rx={3} className="fill-muted-foreground" fillOpacity={0.2} />
+          <rect x={22} y={92} width={30} height={16} rx={3} className="fill-muted-foreground" fillOpacity={0.2} />
+        </>
+      ) : (
+        <>{Array.from({ length: 7 }, (_, k) => <g key={k}>{bar(16, 28 + k * 15, 24)}{bar(48, 28 + k * 15, 120)}</g>)}</>
+      );
+      break;
+    default:
+      body = chosen ? (
+        <>
+          {hatch(14, 28, 60, 98)}
+          <rect x={84} y={28} width={102} height={60} rx={4} className="fill-primary" />
+          {bar(84, 98, 80)}{bar(84, 112, 56)}
+        </>
+      ) : (
+        <>{[0, 1, 2].map((k) => <g key={k}>{hatch(14 + k * 60, 28, 52, 30)}</g>)}{hatch(14, 66, 172, 60)}</>
+      );
+  }
   return (
-    <svg viewBox="-2 -2 152 144" className="block h-auto w-full" fill="none" aria-hidden="true">
+    <svg viewBox="-1 -1 202 142" className="block h-auto w-full" fill="none" aria-hidden="true">
       <defs><Hatch id={`${id}h`} gap={7} /></defs>
-      <Wire v={seed % 4} chosen={chosen} x={0} hid={`${id}h`} />
+      <rect x={1} y={1} width={198} height={138} rx={6} className={`fill-background ${ln}`} strokeOpacity={op} strokeWidth="1.25" />
+      <path d="M1 18h198" className={ln} strokeOpacity={op} />
+      <circle cx={11} cy={9.5} r={2.2} className={chosen ? "fill-primary" : "fill-muted-foreground"} fillOpacity={chosen ? 1 : 0.4} />
+      <circle cx={19} cy={9.5} r={2.2} className="fill-muted-foreground" fillOpacity={0.4} />
+      {body}
     </svg>
   );
 }

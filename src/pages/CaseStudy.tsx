@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { AudienceArt, DecisionSketch, HeroScene, JourneyFlow, PersonaMark, seedOf } from "../components/CaseArt";
+import { AudienceArt, DecisionSketch, sketchKind, type SketchKind, HeroScene, JourneyFlow, PersonaMark, seedOf } from "../components/CaseArt";
 import { GlyphTile } from "../components/Glyphs";
 import { Closing } from "../components/Layout";
 import { Lightbox } from "../components/Lightbox";
@@ -44,7 +44,7 @@ function LayerIcon({ count, active }: { count: number; active: number }) {
   );
 }
 
-function DecisionBlock({ d, i, seed }: { d: Decision; i: number; seed: number }) {
+function DecisionBlock({ d, i, kind }: { d: Decision; i: number; kind: SketchKind }) {
   return (
     <article className="grid gap-10 border-t py-14 lg:grid-cols-12 lg:gap-x-20 lg:py-20">
       <div className="lg:col-span-4">
@@ -53,22 +53,22 @@ function DecisionBlock({ d, i, seed }: { d: Decision; i: number; seed: number })
         <p className="mt-5 text-muted-foreground">{d.problem}</p>
       </div>
       <div className="lg:col-span-8">
-        <div className="relative grid grid-cols-2 gap-5 sm:gap-14">
-          <div className="border-t pt-6">
-            <div className="bg-[hsl(225_20%_97.5%)] px-4 py-5 md:px-10 md:py-8"><div className="mx-auto max-w-[10rem] opacity-70"><DecisionSketch seed={seed + i} chosen={false} /></div></div>
-            <p className="eyebrow mt-6 flex items-center gap-2">
+        <div className="grid items-end gap-5 sm:grid-cols-5 sm:gap-8">
+          <div className="sm:col-span-2">
+            <div className="bg-[hsl(225_20%_97.5%)] p-5 md:p-6"><div className="mx-auto max-w-[11rem] opacity-80"><DecisionSketch kind={kind} chosen={false} /></div></div>
+            <p className="eyebrow mt-5 flex items-center gap-2">
               <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
               Considered
             </p>
-            <p className="mt-3 text-muted-foreground">{d.alt}</p>
+            <p className="mt-2 text-small text-muted-foreground">{d.alt}</p>
           </div>
-          <div className="border-t-2 border-primary pt-6">
-            <div className="bg-[hsl(225_20%_97.5%)] px-4 py-5 md:px-10 md:py-8"><div className="mx-auto max-w-[10rem]"><DecisionSketch seed={seed + i} chosen /></div></div>
-            <p className="eyebrow mt-6 flex items-center gap-2 text-primary">
+          <div className="sm:col-span-3">
+            <div className="border-t-2 border-primary bg-[hsl(225_60%_97.5%)] p-6 md:p-10"><div className="mx-auto max-w-[18rem]"><DecisionSketch kind={kind} chosen /></div></div>
+            <p className="eyebrow mt-5 flex items-center gap-2 text-primary">
               <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>
               Chosen
             </p>
-            <p className="mt-3">{d.choice}</p>
+            <p className="mt-2 text-body-lg">{d.choice}</p>
           </div>
         </div>
         <div className="mt-10 flex gap-4">
@@ -156,7 +156,6 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
   const [open, setOpen] = useState<number | null>(null);
   if (!p || !c) return <NotFound />;
 
-  const seed = seedOf(p.slug);
   const related = projects.filter((x) => x.slug !== p.slug && x.kind !== "inhouse" && x.category === p.category).sort((a, b) => (seedOf(a.slug + p.slug) % 97) - (seedOf(b.slug + p.slug) % 97)).slice(0, 3);
   const chips = [...p.platforms, ...p.scope].slice(0, 3);
   const openKey = (k: string) => setOpen(Math.max(0, gallery.indexOf(k)));
@@ -313,7 +312,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
         <div className="wrap">
           <Head n={++n} eyebrow="Key decisions" title={<>Choices that <span className="text-primary">shaped it</span></>} aside="What I considered, what I chose, and why." />
           <div className="mt-14">
-            {c.decisions.slice(0, 3).map((d, i) => <DecisionBlock key={d.title} d={d} i={i} seed={seed} />)}
+            {(() => { const used = new Set<SketchKind>(); return c.decisions.slice(0, 3).map((d, i) => <DecisionBlock key={d.title} d={d} i={i} kind={sketchKind(`${d.title} ${d.choice}`, used)} />); })()}
           </div>
         </div>
       </section>
