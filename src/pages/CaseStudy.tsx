@@ -15,6 +15,8 @@ import { kindLabel, ProjectCard } from "../components/ProjectCard";
 
 
 const pad = (n: number) => String(n).padStart(2, "0");
+/** One column per item on wide screens, so a row never ends with a lone card. */
+const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
 /** Designed 4:3 cover art: shown at its own shape so nothing gets cropped. */
 const isArt = (id: string) => !id.includes("/") && !!images[id] && images[id].w * 3 === images[id].h * 4;
 const STEP_ICONS: IconKey[] = ["search", "map", "layout", "upload"];
@@ -303,7 +305,8 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
           <Head n={++n} eyebrow="What’s inside" title={<>Key <span className="text-primary">features</span></>} />
           <div className="mt-14 grid gap-px border bg-border sm:grid-cols-2 lg:grid-cols-3">
             {c.features.map((f, i) => (
-              <div key={f.title} className="bg-background p-8">
+              // With an odd count the first feature spans two columns, so every row is full.
+              <div key={f.title} className={`bg-background p-8 ${i === 0 && c.features.length % 2 === 1 ? "sm:col-span-2" : ""}`}>
                 <GlyphTile icon={f.icon} tone={i === 0 ? "solid" : "soft"} />
                 <h3 className="mt-6 text-title">{f.title}</h3>
                 <p className="mt-2 text-small text-muted-foreground">{f.text}</p>
@@ -364,7 +367,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       <section className="section-y border-t">
         <div className="wrap">
           <Head n={++n} eyebrow="Outcome" title={<>What was <span className="text-primary">delivered</span></>} />
-          <ul className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className={`mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 ${COLS[Math.min(c.outcome.length, 5)]}`}>
             {c.outcome.map((o) => (
               <li key={o} className="border-t pt-5">
                 <svg viewBox="0 0 16 16" className="h-4 w-4 text-primary" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>
@@ -376,7 +379,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
           {c.learned.length > 0 && (
             <div className="mt-20 md:mt-28">
               <p className="eyebrow">What I learned</p>
-              <div className="mt-6 grid gap-x-10 gap-y-10 md:grid-cols-3">
+              <div className={`mt-6 grid gap-x-10 gap-y-10 ${c.learned.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
                 {c.learned.map((l, i) => (
                   <div key={l} className="border-t pt-6">
                     <p className="eyebrow text-primary">{pad(i + 1)}</p>
