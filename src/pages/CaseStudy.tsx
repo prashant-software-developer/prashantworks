@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { AudienceArt, DecisionSketch, HeroScene, JourneyFlow, PersonaMark, seedOf, StackArt } from "../components/CaseArt";
+import { AudienceArt, DecisionSketch, HeroScene, JourneyFlow, PersonaMark, seedOf } from "../components/CaseArt";
 import { GlyphTile } from "../components/Glyphs";
 import { Closing } from "../components/Layout";
 import { Lightbox } from "../components/Lightbox";
@@ -27,6 +27,20 @@ function Head({ n, eyebrow, title, aside }: { n: number; eyebrow: string; title:
       </div>
       {aside && <div className="max-w-md text-body-lg text-muted-foreground lg:col-span-5 lg:self-end">{aside}</div>}
     </div>
+  );
+}
+
+/** A small stack of layers with one highlighted: ties each build row to its place in the stack. */
+function LayerIcon({ count, active }: { count: number; active: number }) {
+  const n = Math.max(2, Math.min(count, 5));
+  return (
+    <svg viewBox={`0 0 48 ${16 + n * 8}`} className="h-auto w-12" fill="none" aria-hidden="true">
+      {Array.from({ length: n }, (_, k) => {
+        const y = 4 + k * 8;
+        const on = k === Math.min(active, n - 1);
+        return <path key={k} d={`M24 ${y}L44 ${y + 6}L24 ${y + 12}L4 ${y + 6}Z`} className={on ? "fill-primary stroke-primary" : "fill-background stroke-muted-foreground"} strokeOpacity={on ? 1 : 0.5} strokeWidth="1.1" />;
+      }).reverse()}
+    </svg>
   );
 }
 
@@ -351,16 +365,18 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       {c.system && (
         <section className="section-y border-t">
           <div className="wrap">
-            <Head n={++n} eyebrow="How it was built" title={<>Designed <span className="text-primary">and built</span></>} aside="I designed it and wrote the code, so the design survived contact with reality." />
-            <div className="mt-14 grid items-center gap-12 lg:grid-cols-12 lg:gap-x-20">
-              <div className="mx-auto w-full max-w-sm lg:col-span-4">
-                <StackArt layers={c.system.length} />
+            <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-x-20">
+              <div className="lg:col-span-5">
+                <p className="eyebrow flex items-center gap-3"><span className="text-primary">{pad(++n)}</span><span className="h-px w-8 bg-border" />How it was built</p>
+                <h2 className="h-section mt-6">Designed <span className="text-primary">and built</span></h2>
+                <p className="mt-6 max-w-md text-body-lg text-muted-foreground">I designed it and wrote the code, so the design survived contact with reality.</p>
               </div>
-              <div className="border-t lg:col-span-8">
+              <div className="border-t lg:col-span-7">
                 {c.system.map((l, i) => (
-                  <div key={l.name} className="grid gap-3 border-b py-7 md:grid-cols-[12rem_1fr] md:gap-10">
+                  <div key={l.name} className="grid grid-cols-[3rem_1fr] items-center gap-x-5 border-b py-6 md:grid-cols-[3rem_10rem_1fr] md:gap-x-8">
+                    <LayerIcon count={c.system!.length} active={i} />
                     <p className={i === 0 ? "text-primary" : ""}>{l.name}</p>
-                    <ul className="flex flex-wrap gap-2">{l.items.map((x) => <li key={x} className="chip">{x}</li>)}</ul>
+                    <ul className="col-span-2 mt-3 flex flex-wrap gap-2 md:col-span-1 md:mt-0">{l.items.map((x) => <li key={x} className="chip">{x}</li>)}</ul>
                   </div>
                 ))}
               </div>
