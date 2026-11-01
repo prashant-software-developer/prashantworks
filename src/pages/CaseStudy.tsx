@@ -5,7 +5,6 @@ import { GlyphTile } from "../components/Glyphs";
 import { Closing } from "../components/Layout";
 import { Lightbox } from "../components/Lightbox";
 import { imgSrc, Shot } from "../components/Shot";
-import { images } from "../data/images";
 import { useTitle } from "../components/useTitle";
 import { caseContent } from "../data/cases";
 import type { CaseContent, Chapter, Decision, IconKey, Project } from "../data/cases/types";
@@ -17,8 +16,6 @@ import { kindLabel, ProjectCard } from "../components/ProjectCard";
 const pad = (n: number) => String(n).padStart(2, "0");
 /** One column per item on wide screens, so a row never ends with a lone card. */
 const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
-/** Designed 4:3 cover art: shown at its own shape so nothing gets cropped. */
-const isArt = (id: string) => !id.includes("/") && !!images[id] && images[id].w * 3 === images[id].h * 4;
 const STEP_ICONS: IconKey[] = ["search", "map", "layout", "upload"];
 
 function Head({ n, eyebrow, title, aside }: { n: number; eyebrow: string; title: React.ReactNode; aside?: React.ReactNode }) {
@@ -179,7 +176,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
 
           <div className="mt-14 md:mt-20">
             {p.cover ? (
-              <Shot id={p.cover} alt={`${p.title}: ${p.short}`} mode="full" eager className={isArt(p.cover) ? "mx-auto max-w-5xl" : "md:aspect-[16/9]"} sizes="90vw" />
+              <Shot id={p.cover} alt={`${p.title}: ${p.short}`} mode="full" eager className="md:aspect-[16/10]" sizes="90vw" />
             ) : (
               <div className="bg-[hsl(225_20%_97%)] p-4 md:p-8">
                 <HeroScene icon={p.icon} slug={p.slug} chips={chips} />
