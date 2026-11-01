@@ -22,7 +22,8 @@ export default function Gallery() {
       </section>
       <section className="pb-24 md:pb-32">
         <div className="wrap grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-          {gallery.map((g, i) => (
+          {/* A multiple of 6 keeps rows full in both the 2- and 3-column grids; the rest open in the viewer. */}
+          {gallery.slice(0, Math.max(6, gallery.length - (gallery.length % 6))).map((g, i) => (
             <button key={g.id} onClick={() => setOpen(i)} className="group block cursor-zoom-in" aria-label={`Open screen ${i + 1}`}>
               <Shot id={g.id} alt="" mode="full" eager={i < 6} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw" />
             </button>

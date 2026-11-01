@@ -208,7 +208,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
 
           <div className="mt-14 md:mt-16">
             <p className="eyebrow">Who it’s for</p>
-            <ul className="mt-5 grid gap-x-10 gap-y-8 border-t pt-8 sm:grid-cols-2 lg:grid-cols-4">
+            <ul className={`mt-5 grid gap-x-10 gap-y-8 border-t pt-8 ${c.context.audience.length === 3 ? "sm:grid-cols-3" : `sm:grid-cols-2 ${COLS[Math.min(c.context.audience.length, 5)]}`}`}>
               {c.context.audience.map((a) => (
                 <li key={a.who}>
                   <p className="text-title">{a.who}</p>
