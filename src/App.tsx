@@ -12,6 +12,7 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import Book from "./pages/Book";
 import { projects } from "./data/projects";
+import { trackPageView } from "./analytics";
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -25,10 +26,21 @@ function ScrollToTop() {
   return null;
 }
 
+/** Reports each page change to Google Analytics, after the page has set its title. */
+function PageViews() {
+  const { pathname, search } = useLocation();
+  useEffect(() => {
+    const t = setTimeout(() => trackPageView(pathname + search), 0);
+    return () => clearTimeout(t);
+  }, [pathname, search]);
+  return null;
+}
+
 export default function App() {
   return (
     <>
       <ScrollToTop />
+      <PageViews />
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
