@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import { CompanyIcon } from "../components/CompanyIcon";
+import { GlyphTile } from "../components/Glyphs";
+import type { IconKey } from "../data/cases/types";
 import { BookButton, Closing, SectionHead } from "../components/Layout";
 import { Shot } from "../components/Shot";
 import { useTitle } from "../components/useTitle";
 import { contact, experience, skills } from "../data/site";
+
+const SKILL_ICONS: IconKey[] = ["tasks", "shield", "agent", "code", "layout"];
 
 const ext = { target: "_blank", rel: "noopener noreferrer" } as const;
 
@@ -143,34 +147,34 @@ export default function About() {
 
       {/* Skills + education */}
       <section className="section-y border-t">
-        <div className="wrap grid gap-16 lg:grid-cols-12 lg:gap-x-20">
-          <div className="lg:col-span-7">
-            <p className="eyebrow">Skills</p>
-            <div className="mt-10 border-t">
-              {skills.map((s) => (
-                <div key={s.title} className="grid gap-3 border-b py-8 md:grid-cols-[12rem_1fr] md:gap-10">
-                  <p>{s.title}</p>
-                  <ul className="flex flex-wrap gap-2">
-                    {s.items.map((x) => (
-                      <li key={x} className="chip">{x}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
+        <div className="wrap">
+          <SectionHead eyebrow="Skills" heading={<>What I <span className="text-primary">bring</span></>} />
+          <div className="mt-16 grid gap-px border bg-border sm:grid-cols-2 lg:grid-cols-5 md:mt-20">
+            {skills.map((s, i) => (
+              <div key={s.title} className="bg-background p-8">
+                <GlyphTile icon={SKILL_ICONS[i % SKILL_ICONS.length]} tone={i === 0 ? "solid" : "soft"} />
+                <h3 className="mt-6 text-title">{s.title}</h3>
+                <ul className="mt-4 space-y-2 text-muted-foreground">
+                  {s.items.map((x) => <li key={x}>{x}</li>)}
+                </ul>
+              </div>
+            ))}
           </div>
-          <div className="lg:col-span-5">
-            <p className="eyebrow">Education</p>
-            <div className="mt-10 flex gap-6 border-t pt-8">
+
+          <div className="mt-16 grid gap-10 border-t pt-10 md:grid-cols-2 md:gap-x-20">
+            <div className="flex gap-5">
               <CompanyIcon company="IIIT Sonepat" />
               <div>
-                <p className="text-title">B.Tech, Computer Science</p>
-                <p className="mt-1 text-muted-foreground">IIIT Sonepat · 2021 – 2025</p>
-                <p className="mt-1 text-small text-muted-foreground">8.5 CGPA · GDSC WOW, startup summits and hackathons</p>
+                <p className="eyebrow">Education</p>
+                <p className="mt-3 text-title">B.Tech, Computer Science</p>
+                <p className="mt-1 text-muted-foreground">IIIT Sonepat · 2021 – 2025 · 8.5 CGPA</p>
               </div>
             </div>
-            <p className="eyebrow mt-14">Languages</p>
-            <p className="mt-4 border-t pt-6 text-muted-foreground">English (professional) · Hindi (native)</p>
+            <div>
+              <p className="eyebrow">Languages</p>
+              <p className="mt-3 text-title">English and Hindi</p>
+              <p className="mt-1 text-muted-foreground">Professional English · native Hindi</p>
+            </div>
           </div>
         </div>
       </section>
