@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import App from "./App";
 
-export { allMeta, redirects, ORIGIN, NAME } from "./seo";
+export { allMeta, redirects, ORIGIN, NAME, llmsText } from "./seo";
 
 const tree = (url: string) => (
   <StrictMode>

@@ -53,9 +53,9 @@ const doors = [
   {
     art: LeadArt,
     who: "Hiring managers",
-    title: "Hire me for your team",
-    body: "Project lead or product engineer for AI products, remote and open to contract.",
-    price: "Remote · Available now",
+    title: "Hire me to lead your program",
+    body: "Strategic project lead for AI data and evaluation programs: customer scoping, expert teams, quality and delivery. Product engineer by background.",
+    price: "Open to full-time lead roles",
     topic: "hire",
     cta: "Book an intro call",
     more: { to: "/about", label: "Experience & CV" },
@@ -115,7 +115,7 @@ export default function Home() {
                 <span className="absolute inline-flex h-full w-full bg-primary opacity-50 motion-safe:animate-ping" />
                 <span className="relative inline-flex h-2 w-2 bg-primary" />
               </span>
-              Open to new projects
+              Open to SPL roles and new projects
             </p>
             <h1 className="display mt-8">
               Ship your AI product <span className="text-primary">faster.</span>

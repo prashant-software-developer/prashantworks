@@ -15,6 +15,8 @@ import { projects } from "./data/projects";
 import { trackPageView } from "./analytics";
 import { Analytics } from "@vercel/analytics/react";
 
+const onVercel = () => import.meta.env.PROD && typeof window !== "undefined" && !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
+
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
   useEffect(() => {
@@ -42,7 +44,8 @@ export default function App() {
     <>
       <ScrollToTop />
       <PageViews />
-      <Analytics />
+      {/* Vercel Analytics only exists on the Vercel deployment; skip it locally so previews have no 404s. */}
+      {onVercel() && <Analytics />}
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />

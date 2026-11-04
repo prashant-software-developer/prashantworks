@@ -65,19 +65,19 @@ function PicstoneArt() {
 }
 
 export default function About() {
-  useTitle("About", "Founder of FynoLabs and product engineer at Ringover. Experience, projects and skills.");
+  useTitle("About", "Strategic project lead for AI data programs: founder of FynoLabs and product engineer at Ringover. Experience, projects and skills.");
   return (
     <>
       {/* Hero */}
       <section className="pb-16 pt-10 md:pb-24 md:pt-16">
         <div className="wrap grid items-center gap-12 lg:grid-cols-12 lg:gap-x-20">
           <div className="lg:col-span-6">
-            <p className="eyebrow">About</p>
+            <p className="eyebrow">About · Open to strategic project lead roles</p>
             <h1 className="display mt-8">
-              Engineer, designer, <span className="text-primary">lead.</span>
+              I lead AI data programs, <span className="text-primary">end to end.</span>
             </h1>
             <p className="mt-8 max-w-lg text-body-lg text-muted-foreground lg:text-xl lg:leading-relaxed">
-              I run AI training delivery at FynoLabs and build conversational AI at Ringover. Three years of shipping products, from first sketch to production.
+              At FynoLabs I run AI-data programs for frontier labs and data partners: scoping with the customer, vetted expert teams, quality and delivery. At Ringover I build conversational AI. Now looking for strategic project, program and delivery lead roles in AI.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
               <BookButton topic="hire" label="Book an intro call" />
@@ -177,7 +177,7 @@ export default function About() {
       <Closing
         topic="hire"
         heading={<>Hiring for an AI team?<br /><span className="text-primary">Let's talk about the role.</span></>}
-        body="Project lead or product engineer, remote and open to contract."
+        body="Strategic project lead, program or delivery lead for AI data and evaluation. Remote or on-site in India."
       />
     </>
   );

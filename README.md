@@ -33,11 +33,15 @@ Old Figma-site URLs redirect permanently: `/ringover`, `/vyuu-ai`, `/qrios-x`, `
 ### Check before publishing
 Projects that only had a name in the Portfolio were written from the product type. Read them and correct anything that doesn't match what you did, especially "What was delivered" and the build stacks. Merged duplicates: Briefly (= Briefiq.in), LinkSaver (= Resource Saver / Resourcify), Smart Calendar (= SmartCalendar.io), Safe Bump (= SafeBump), TaskFlow (= Task Management), True-Match (= Dating app), TestGuard (= QA Testing), Video to Blog (= Video Transcriber), Prompt Enhancer (= Prompt Tuner), Agentic SOC Platform (= Cregent); Accioibis is a chapter of the Wispel page.
 
-## SEO
+## SEO and GEO (AI search)
 
-- `npm run build` builds the app, then `scripts/prerender.mjs` writes real HTML for all 64 routes with title, description, canonical, Open Graph and JSON-LD (Person, ProfessionalService with prices, FAQPage, CreativeWork per case study, breadcrumbs), plus `sitemap.xml`, `404.html` and Netlify `_redirects`.
-- Metadata lives in `src/seo.ts` (case studies) and `src/seo-pages.ts` (fixed pages).
-- After going live: add the site to Google Search Console and submit `https://www.prashantworks.com/sitemap.xml`.
+- `npm run build` builds the app, then `scripts/prerender.mjs` writes real HTML for every route with title, description, canonical, Open Graph and JSON-LD.
+- **Structured data:** Person (education, occupations, skills, sameAs), FynoLabs Organization, ProfessionalService (prices, areas served: US, UK, EU, Hong Kong, India, remote), a Service per offering, WebPage / ProfilePage / ContactPage, FAQPage on the home page and on every case study, CreativeWork per case study, breadcrumbs.
+- **GEO (ChatGPT, Perplexity, Claude, Google AI Overviews):** every case study ends with an "In brief" section of five answer-first questions, also sent as FAQ data; `llms.txt` (site summary) and `llms-full.txt` (every case study in plain text) are generated at build; `robots.txt` explicitly allows AI search crawlers.
+- **Local:** geo meta tags for Varanasi, Uttar Pradesh; address and areas served in the structured data.
+- **Sitemap** with lastmod, priority and case-study images; `404.html`; Netlify `_redirects`.
+- Metadata lives in `src/seo.ts` (case studies, structured data, llms.txt) and `src/seo-pages.ts` (titles and descriptions of fixed pages); the Q&A in `src/data/cases/faq.ts`.
+- After going live: add the site to Google Search Console and Bing Webmaster Tools and submit `https://www.prashantworks.com/sitemap.xml`.
 
 ## Edit content
 

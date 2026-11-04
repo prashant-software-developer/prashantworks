@@ -10,12 +10,15 @@ import { caseContent } from "../data/cases";
 import type { CaseContent, Chapter, Decision, IconKey, Project } from "../data/cases/types";
 import { projectBySlug, projects } from "../data/projects";
 import NotFound from "./NotFound";
+import { caseFaq } from "../data/cases/faq";
 import { kindLabel, ProjectCard } from "../components/ProjectCard";
 
 
 const pad = (n: number) => String(n).padStart(2, "0");
 /** One column per item on wide screens, so a row never ends with a lone card. */
 const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
+/** The "How I worked" section is hidden for now; set to true to bring it back. */
+const SHOW_APPROACH = false as boolean;
 const STEP_ICONS: IconKey[] = ["search", "map", "layout", "upload"];
 
 function Head({ n, eyebrow, title, aside }: { n: number; eyebrow: string; title: React.ReactNode; aside?: React.ReactNode }) {
@@ -235,7 +238,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
       </section>
 
       {/* Approach: hidden for now, the decisions tell this story with less text */}
-      {false && (
+      {SHOW_APPROACH && (
       <section className="section-y border-t bg-[hsl(225_20%_98.5%)]">
         <div className="wrap">
           <Head n={++n} eyebrow={p.kind === "inhouse" ? "How I work in the team" : "How I worked"} title={<>From brief to <span className="text-primary">hand-off</span></>} />
@@ -405,6 +408,30 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
                 </ol>
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* In brief: answer-first Q&A for readers, search engines and AI assistants (same text as the FAQ structured data) */}
+      <section className="section-y border-t" aria-labelledby="in-brief">
+        <div className="wrap grid gap-10 lg:grid-cols-12 lg:gap-x-16">
+          <div className="lg:col-span-4">
+            <p className="eyebrow">In brief</p>
+            <h2 id="in-brief" className="h-section mt-6">{p.title}, <span className="text-primary">in five answers</span></h2>
+          </div>
+          <div className="border-t lg:col-span-8">
+            {caseFaq(p, c).map((f, i) => (
+              <details key={f.q} className="group border-b" open={i === 0}>
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-body-lg [&::-webkit-details-marker]:hidden">
+                  <h3 className="font-normal">{f.q}</h3>
+                  <span aria-hidden="true" className="relative h-4 w-4 shrink-0">
+                    <span className="absolute left-0 top-1/2 h-px w-4 bg-foreground" />
+                    <span className="absolute left-1/2 top-0 h-4 w-px bg-foreground transition-transform duration-300 group-open:scale-y-0" />
+                  </span>
+                </summary>
+                <p className="max-w-2xl pb-6 text-muted-foreground">{f.a}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

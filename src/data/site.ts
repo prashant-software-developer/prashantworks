@@ -96,7 +96,7 @@ export const experience = [
     company: "Wispel",
     note: "AI parallel dialer for B2B sales teams · Paris (Remote)",
     url: "https://wispel.app/",
-    period: "Jun 2023 – Sep 2024",
+    period: "Oct 2022 – Sep 2024",
     points: [
       "Early engineer on Wispel, a parallel dialer that connects outbound reps to live decision-makers, working directly with the founders from prototype to production.",
       "Built real-time calling, messaging and email on the Vonage SDK with React and Redux.",
