@@ -95,7 +95,7 @@ function Header() {
 }
 
 /** Closing band at the end of every page: one clear next step. */
-export function Closing({ eyebrow = "Next step", heading, body, topic }: { eyebrow?: string; heading?: ReactNode; body?: string; topic?: string }) {
+export function Closing({ eyebrow = "Next step", heading, body, topic, label, note }: { eyebrow?: string; heading?: ReactNode; body?: string; topic?: string; label?: string; note?: string }) {
   return (
     <section className="py-20 md:py-28">
       <div className="wrap">
@@ -116,8 +116,8 @@ export function Closing({ eyebrow = "Next step", heading, body, topic }: { eyebr
               {body ?? "Pick a time that suits you. You'll leave the call with a clear next step, whether we work together or not."}
             </p>
             <div className="mt-10 flex flex-col items-center">
-              <BookButton topic={topic} />
-              <Reassure className="mt-5" />
+              <BookButton topic={topic} label={label} />
+              {note ? <p className="mt-5 text-small text-muted-foreground">{note}</p> : <Reassure className="mt-5" />}
               <p className="mt-8 text-small text-muted-foreground">
                 Prefer email? <a href={`mailto:${contact.email}`} className="select-all text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground">{contact.email}</a>
               </p>

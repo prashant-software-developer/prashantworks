@@ -7,7 +7,7 @@ import { heroGif, heroStill, postBySlug, postPath, readingTime, sortedPosts, tra
 
 const fmt = (iso: string) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 
-const prose = "text-body-lg leading-[1.75] text-muted-foreground";
+const prose = "text-body-lg leading-[1.75] text-[hsl(225_10%_30%)]";
 
 function Body({ b }: { b: Block }) {
   switch (b.t) {
@@ -39,12 +39,9 @@ function Body({ b }: { b: Block }) {
       );
     case "callout":
       return (
-        <aside className="relative mt-10 overflow-hidden border bg-[hsl(225_20%_98%)] p-7 md:p-9">
-          <div aria-hidden="true" className="blueprint-grid opacity-60" />
-          <div className="relative">
-            <p className="text-title text-foreground">{b.title}</p>
-            <p className="mt-3 text-body text-muted-foreground"><Inline text={b.text} /></p>
-          </div>
+        <aside className="mt-10 border-l-2 border-primary bg-[hsl(225_20%_98%)] py-6 pl-7 pr-7 md:py-7 md:pl-9 md:pr-9">
+          <p className="text-title text-foreground">{b.title}</p>
+          <p className="mt-3 text-body text-muted-foreground"><Inline text={b.text} /></p>
         </aside>
       );
     case "table":
@@ -64,8 +61,8 @@ function Body({ b }: { b: Block }) {
       );
     case "gallery":
       return (
-        <figure className="mt-10">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+        <figure className="mt-12 lg:-mx-[60px]">
+          <div className="grid grid-cols-2 gap-4 md:gap-6">
             {b.items.map((it) => (
               <img key={it.src} src={it.src} alt={it.alt} width={1080} height={1350} loading="lazy" decoding="async" className="shot" />
             ))}
@@ -168,6 +165,8 @@ export default function BlogPost() {
         heading={<>{p.cta.label}.<br /><span className="text-primary">No call needed, no commitment.</span></>}
         body={p.track === "Founders" ? "Send your product or idea. You get one page: what to fix, what to cut, what I'd build first." : p.track === "AI labs" ? "Send one task, rubric or test suite. NDA on request, or a sanitised sample. Written review within 48 hours." : "Founders get a one-page teardown. AI labs get a written review of one task within 48 hours."}
         topic={p.cta.topic}
+        label={p.track === "Founders" ? "Send your product for a teardown" : p.track === "AI labs" ? "Send a task for review" : "Get a free review"}
+        note={p.track === "AI labs" ? "Free · Written review in 48 hours · No commitment" : "Free · One page back · No commitment"}
       />
     </>
   );

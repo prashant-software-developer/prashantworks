@@ -21,11 +21,10 @@ function Card({ p, eager }: { p: BlogPost; eager?: boolean }) {
             onError={(e) => { (e.currentTarget as HTMLImageElement).src = heroStill(p); }}
           />
         </div>
-        <p className="eyebrow mt-6">{trackLabel[p.track]}</p>
-        <h2 className="mt-3 text-2xl font-light tracking-tight group-hover:text-primary">{p.title}</h2>
+        <h2 className="mt-7 text-2xl font-light tracking-tight group-hover:text-primary">{p.title}</h2>
         <p className="mt-3 text-body text-muted-foreground">{p.standfirst}</p>
         <p className="mt-4 text-small text-muted-foreground">
-          <time dateTime={p.date}>{fmt(p.date)}</time> · {readingTime(p)} min read
+          {trackLabel[p.track]} · <time dateTime={p.date}>{fmt(p.date)}</time> · {readingTime(p)} min read
         </p>
       </Link>
     </article>
