@@ -5,10 +5,10 @@ import { useTitle } from "../components/useTitle";
 import { contact } from "../data/site";
 
 const stats = [
-  { value: "2,500+", label: "Tasks delivered" },
   { value: "90%", label: "Acceptance rate" },
   { value: "4.89/5", label: "Average quality rating" },
-  { value: "25+", label: "Contributors & reviewers" },
+  { value: "45/50", label: "Terminal-Bench tasks accepted" },
+  { value: "48 h", label: "Free review turnaround" },
 ];
 const statCell = [
   "border-b pr-6 lg:border-b-0 lg:border-r lg:pr-10",
@@ -20,37 +20,52 @@ const statCell = [
 const benches = [
   { art: TerminalArt, name: "Terminal-Bench", count: "50 authored · 45 accepted", text: "Dockerized terminal tasks with reference solutions and deterministic tests." },
   { art: DiffArt, name: "SWE-bench", count: "9 authored · 7 accepted", text: "Real repository bugs, a fix, and the tests that prove it." },
-  { art: PaperArt, name: "PaperBench", count: "24 authored · 22 accepted", text: "Research papers turned into graded rubric trees." },
+  { art: PaperArt, name: "PaperBench", count: "15 reviewed · 14 accepted", text: "Agent reproductions of research papers, graded against weighted rubric trees." },
 ];
 
 const tiers = [
   {
-    name: "Individual specialist",
-    price: "From $30",
-    unit: "/ task",
-    text: "I do the work myself, where quality and accountability matter most.",
-    items: ["Prompt writing & evaluation", "CLI reasoning task design", "Annotation & labeling", "RLHF & red-teaming", "Benchmark creation + test suites"],
-    cta: "Contact me",
+    name: "Free task review",
+    price: "$0",
+    unit: "/ 48 hours",
+    text: "Send one task, rubric or test suite. You get a written review: where an agent could shortcut it, what the tests miss, and how to fix it.",
+    items: ["One task, rubric or test suite", "Shortcut and reward-hacking check", "Test coverage gaps", "Written fixes you keep", "NDA signed first if you need one"],
+    cta: "Send a task",
   },
   {
-    name: "Coordinated delivery",
-    price: "Custom",
-    unit: "",
-    text: "A vetted team through FynoLabs, with me as your single point of contact.",
-    items: ["Everything in the specialist tier", "Contributor sourcing & management", "Peer review & calibration", "High-volume datasets", "STEM, coding and finance"],
+    name: "Paid pilot",
+    price: "10 tasks",
+    unit: "/ 1 week",
+    text: "A small batch on your rubric and platform, priced per task by complexity and agreed upfront. You grade every task before deciding to scale.",
+    items: ["Vetted authors on your domain", "Second-specialist review on every task", "Oracle, no-op and shortcut checks", "Weekly report: acceptance, rework, notes", "One point of contact: me"],
     cta: "Start a pilot",
     featured: true,
+  },
+  {
+    name: "Managed delivery",
+    price: "Custom",
+    unit: "",
+    text: "Full volume after the pilot, with the same review gates and a weekly quality report.",
+    items: ["Everything in the pilot", "Contributor sourcing, onboarding and pay", "Calibration when grading drifts", "Coding, STEM and finance tasks", "Volume pricing"],
+    cta: "Plan a programme",
   },
 ];
 
 const steps = [
-  { when: "Day 1", title: "Share scope", text: "Domain, volume, rubric and timeline." },
-  { when: "Week 1", title: "Paid pilot", text: "5–10 vetted experts on a small batch you can grade." },
-  { when: "Weeks 2+", title: "Scale", text: "Full volume within weeks, with review built in." },
+  { when: "Within 48 hours", title: "Free review", text: "One task or rubric, reviewed in writing. You see how I think before you pay." },
+  { when: "Week 1", title: "Paid pilot", text: "10 tasks on your rubric. You grade every one." },
+  { when: "Weeks 2+", title: "Scale", text: "Full volume with the same four review gates and a weekly report." },
+];
+
+const trust = [
+  { title: "NDA first", text: "I sign your NDA before seeing tasks, rubrics or model outputs." },
+  { title: "Never named", text: "Clients and programmes are never named in public, on this site or anywhere else." },
+  { title: "Your platform", text: "Work happens in your tools and repositories when you prefer. Nothing leaves them." },
+  { title: "One owner", text: "You talk to one accountable person, not a marketplace of strangers." },
 ];
 
 export default function AiTraining() {
-  useTitle("AI Training", "Benchmark-grade AI training data: Terminal-Bench, SWE-bench and PaperBench tasks, a four-stage review flow, and a team of 25+ contributors.");
+  useTitle("AI Training", "Benchmark-grade AI training data for labs and data partners: Terminal-Bench, SWE-bench and PaperBench work, four review gates, 90% acceptance. Free 48-hour task review.");
   return (
     <>
       <section className="pb-10 pt-20 md:pb-16 md:pt-32">
@@ -68,11 +83,11 @@ export default function AiTraining() {
             </div>
             <div className="flex max-w-xl flex-col justify-end lg:col-span-4">
               <p className="text-body-lg text-muted-foreground lg:text-xl lg:leading-relaxed">
-                For frontier AI labs and data partners. I author tasks myself and lead the team that scales them.
+                For frontier AI labs and data partners. I author tasks myself, so I know where agents cheat and tests break. Send one task and get a written review in 48 hours, free.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-                <BookButton topic="data" label="Book a data call" />
-                <a href={`mailto:${contact.email}?subject=AI%20training%20project`} className="text-link text-muted-foreground hover:text-foreground">Email a brief</a>
+                <BookButton topic="data" label="Get a free task review" />
+                <a href={`mailto:${contact.email}?subject=Free%2048-hour%20task%20review`} className="text-link text-muted-foreground hover:text-foreground">Email a task</a>
               </div>
               <Reassure className="mt-4" />
             </div>
@@ -131,8 +146,8 @@ export default function AiTraining() {
 
       <section className="section-y border-t">
         <div className="wrap">
-          <SectionHead eyebrow="Engagement" heading={<>Two ways to <span className="text-primary">work together</span></>} />
-          <div className="mt-20 grid gap-8 md:mt-28 lg:mt-32 lg:grid-cols-2 lg:gap-10">
+          <SectionHead eyebrow="Engagement" heading={<>Start free, <span className="text-primary">then prove it</span></>} aside="Most vendors ask you to commit first. Here you judge the work on your own rubric before you scale." />
+          <div className="mt-20 grid gap-8 md:mt-28 lg:mt-32 lg:grid-cols-3 lg:gap-10">
             {tiers.map((t) => (
               <div key={t.name} className={`flex flex-col border p-8 md:p-12 ${t.featured ? "border-primary" : ""}`}>
                 <p className="eyebrow">{t.name}</p>
@@ -155,7 +170,21 @@ export default function AiTraining() {
         </div>
       </section>
 
-      <Closing topic="data" heading={<>Have a dataset to build?<br /><span className="text-primary">Start with a pilot.</span></>} body="Tell me the domain, task type and volume. We'll scope a paid pilot with 5–10 vetted experts." />
+      <section className="section-y border-t">
+        <div className="wrap">
+          <SectionHead eyebrow="Confidentiality" heading={<>Your data <span className="text-primary">stays yours</span></>} />
+          <div className="mt-16 grid gap-x-12 gap-y-12 sm:grid-cols-2 md:mt-20 lg:grid-cols-4">
+            {trust.map((t) => (
+              <div key={t.title} className="border-t pt-8">
+                <h3 className="text-2xl font-light tracking-tight">{t.title}</h3>
+                <p className="mt-4 text-muted-foreground">{t.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Closing topic="data" heading={<>Have a task you're unsure about?<br /><span className="text-primary">Send it. Review in 48 hours.</span></>} body="One task, rubric or test suite. You get written fixes for free, and a pilot plan if you want one." />
     </>
   );
 }

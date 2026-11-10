@@ -166,7 +166,7 @@ export default function CaseStudy({ slug: fixed }: { slug?: string }) {
   const extra = p.screens.filter((k) => k !== p.cover);
   const shown = extra.slice(0, extra.length >= 5 ? 5 : extra.length);
   let n = 0;
-  const topic = p.kind === "inhouse" ? "hire" : p.category === "AI products" ? "product" : "product";
+  const topic = "product";
 
   return (
     <>

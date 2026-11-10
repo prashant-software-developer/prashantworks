@@ -3,6 +3,7 @@ import { contact, experience, faqs, pricing, services } from "./data/site";
 import { caseFaq } from "./data/cases/faq";
 import { projects } from "./data/projects";
 import { images } from "./data/images";
+import { posts, postPath, heroStill, wordCount, trackLabel } from "./data/blog";
 
 /**
  * Search metadata for every route: titles, descriptions, canonical URLs, social images and structured data.
@@ -182,6 +183,27 @@ const pages: Omit<Meta, "image">[] = [
     jsonLd: [page("/gallery", "CollectionPage"), crumbs([{ name: "Home", path: "/" }, { name: "Gallery", path: "/gallery" }])],
   },
   {
+    path: "/blog",
+    title: staticMeta["/blog"].title,
+    description: staticMeta["/blog"].description,
+    priority: 0.8,
+    jsonLd: [
+      {
+        "@type": "Blog",
+        "@id": `${ORIGIN}/blog#blog`,
+        name: `${NAME} · Blog`,
+        url: `${ORIGIN}/blog`,
+        description: staticMeta["/blog"].description,
+        inLanguage: "en",
+        author: { "@id": `${ORIGIN}/#person` },
+        publisher: { "@id": `${ORIGIN}/#person` },
+        blogPost: posts.map((p) => ({ "@type": "BlogPosting", "@id": `${ORIGIN}${postPath(p)}#post`, headline: p.title, url: `${ORIGIN}${postPath(p)}`, datePublished: p.date })),
+      },
+      page("/blog", "CollectionPage"),
+      crumbs([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }]),
+    ],
+  },
+  {
     path: "/book",
     title: staticMeta["/book"].title,
     description: staticMeta["/book"].description,
@@ -227,6 +249,40 @@ export function allMeta(): Meta[] {
       ],
     });
   }
+  for (const p of posts) {
+    const path = postPath(p);
+    const image = `${ORIGIN}${heroStill(p)}`;
+    out.push({
+      path,
+      title: T(p.title),
+      description: p.standfirst,
+      image,
+      images: [image],
+      priority: 0.7,
+      jsonLd: [
+        {
+          "@type": "BlogPosting",
+          "@id": `${ORIGIN}${path}#post`,
+          mainEntityOfPage: `${ORIGIN}${path}`,
+          headline: p.title,
+          description: p.standfirst,
+          image,
+          url: `${ORIGIN}${path}`,
+          datePublished: p.date,
+          dateModified: p.date,
+          author: { "@id": `${ORIGIN}/#person` },
+          publisher: { "@id": `${ORIGIN}/#person` },
+          isPartOf: { "@id": `${ORIGIN}/blog#blog` },
+          articleSection: trackLabel[p.track],
+          keywords: p.keywords.join(", "),
+          wordCount: wordCount(p),
+          inLanguage: "en",
+          citation: p.sources.map((c) => ({ "@type": "CreativeWork", name: c.title, url: c.url })),
+        },
+        crumbs([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }, { name: p.title, path }]),
+      ],
+    });
+  }
   return out;
 }
 
@@ -259,6 +315,8 @@ export function llmsText(full: boolean) {
     if (!c) continue;
     lines.push(`- [${p.title}: ${p.short}](${ORIGIN}/work/${p.slug}) (${p.kind === "inhouse" ? "in-house" : p.kind === "own" ? "own product" : "freelance"}, ${p.category}): ${c.tagline}`);
   }
+  lines.push("", "## Blog", "");
+  for (const p of posts) lines.push(`- [${p.title}](${ORIGIN}${postPath(p)}) (${p.date}, ${trackLabel[p.track].toLowerCase()}): ${p.standfirst}`);
   if (full) {
     for (const p of projects) {
       const c = caseContent[p.slug];

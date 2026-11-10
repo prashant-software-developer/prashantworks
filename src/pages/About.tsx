@@ -65,23 +65,23 @@ function PicstoneArt() {
 }
 
 export default function About() {
-  useTitle("About", "Strategic project lead for AI data programs: founder of FynoLabs and product engineer at Ringover. Experience, projects and skills.");
+  useTitle("About", "Prashant Kumar Singh: product engineer and founder of FynoLabs. I design, build and train AI products end to end. Experience, projects and skills.");
   return (
     <>
       {/* Hero */}
       <section className="pb-16 pt-10 md:pb-24 md:pt-16">
         <div className="wrap grid items-center gap-12 lg:grid-cols-12 lg:gap-x-20">
           <div className="lg:col-span-6">
-            <p className="eyebrow">About · Open to strategic project lead roles</p>
+            <p className="eyebrow">About</p>
             <h1 className="display mt-8">
-              I lead AI data programs, <span className="text-primary">end to end.</span>
+              I build AI products, <span className="text-primary">and the data behind them.</span>
             </h1>
             <p className="mt-8 max-w-lg text-body-lg text-muted-foreground lg:text-xl lg:leading-relaxed">
-              At FynoLabs I run AI-data programs for frontier labs and data partners: scoping with the customer, vetted expert teams, quality and delivery. At Ringover I build conversational AI. Now looking for strategic project, program and delivery lead roles in AI.
+              At Ringover I design and ship conversational AI used by global sales teams. At FynoLabs I run AI training programmes for frontier labs and data partners, and I author benchmark tasks myself. You get one person who understands the model, the product and the user.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <BookButton topic="hire" label="Book an intro call" />
-              <a href={contact.cv} {...ext} className="text-link text-muted-foreground hover:text-foreground">Download CV</a>
+              <BookButton label="Get a free review" />
+              <Link to="/work" className="text-link text-muted-foreground hover:text-foreground">See case studies</Link>
             </div>
           </div>
           <div className="lg:col-span-6">
@@ -174,11 +174,7 @@ export default function About() {
         </div>
       </section>
 
-      <Closing
-        topic="hire"
-        heading={<>Hiring for an AI team?<br /><span className="text-primary">Let's talk about the role.</span></>}
-        body="Strategic project lead, program or delivery lead for AI data and evaluation. Remote or on-site in India."
-      />
+      <Closing />
     </>
   );
 }

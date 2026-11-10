@@ -17,6 +17,8 @@ const tree = (url: string) => (
 export async function render(url: string) {
   renderToString(tree(url));
   await import("./pages/CaseStudy");
+  await import("./pages/Blog");
+  await import("./pages/BlogPost");
   await new Promise((r) => setTimeout(r, 0));
   return renderToString(tree(url));
 }

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Blueprint, DataArt, HeroArt, LeadArt, ProductArt, IllustratedSteps } from "../components/Art";
+import { Blueprint, DataArt, HeroArt, ProductArt, IllustratedSteps } from "../components/Art";
 import { BookButton, Closing, Reassure, SectionHead } from "../components/Layout";
 import { Glyph } from "../components/Glyphs";
 import { useTitle } from "../components/useTitle";
@@ -12,7 +12,7 @@ import { ProjectCard } from "../components/ProjectCard";
  * Page plan (who comes here, and what makes them book):
  *  1. Hero: the outcome in five words, one button, the small print that removes risk.
  *  2. Trust: the kinds of teams I build for.
- *  3. Three doors: founders (build), AI teams (data), hiring managers (hire). Each ends in a booking.
+ *  3. Two doors: founders (build) and AI teams (data). Each starts with a free review.
  *  4. Proof: numbers from real delivery.
  *  5. Work: four projects, screens do the talking.
  *  6. After you book: what happens, so the call feels safe.
@@ -33,40 +33,30 @@ const doors = [
   {
     art: ProductArt,
     who: "Founders & product teams",
-    title: "Build a product",
-    body: "MVPs, SaaS and mobile apps, designed and coded by one person. No handoffs.",
-    price: "Projects from $2,000",
+    title: "Ship your MVP or AI feature",
+    body: "Designed and coded by one person, at a fixed price. Start with a free one-page teardown of your product or idea.",
+    price: "Fixed-price sprints from $2,000",
     topic: "product",
-    cta: "Book a product call",
+    cta: "Get a free teardown",
     more: { to: "/services", label: "Services & pricing" },
   },
   {
     art: DataArt,
     who: "AI labs & data partners",
-    title: "Train your AI model",
-    body: "Benchmark-grade coding and evaluation tasks, reviewed in four stages before they ship.",
-    price: "Tasks from $30",
+    title: "Get benchmark-grade AI data",
+    body: "Coding and evaluation tasks, reviewed in four stages before they ship. Send one task or rubric and get a written review in 48 hours, free.",
+    price: "Paid pilot: 10 tasks in 1 week",
     topic: "data",
-    cta: "Book a data call",
+    cta: "Get a free task review",
     more: { to: "/ai-training", label: "How I run AI training" },
-  },
-  {
-    art: LeadArt,
-    who: "Hiring managers",
-    title: "Hire me to lead your program",
-    body: "Strategic project lead for AI data and evaluation programs: customer scoping, expert teams, quality and delivery. Product engineer by background.",
-    price: "Open to full-time lead roles",
-    topic: "hire",
-    cta: "Book an intro call",
-    more: { to: "/about", label: "Experience & CV" },
   },
 ];
 
 const proof = [
-  { value: "2,500+", label: "AI tasks delivered" },
-  { value: "90%", label: "Acceptance rate" },
+  { value: "90%", label: "AI task acceptance" },
+  { value: "4.89/5", label: "Average quality rating" },
   { value: "22+", label: "Products shipped" },
-  { value: "3 yrs", label: "Shipping software" },
+  { value: "98%", label: "On-time delivery" },
 ];
 const statCell = [
   "border-b pr-6 lg:border-b-0 lg:border-r lg:pr-10",
@@ -76,22 +66,22 @@ const statCell = [
 ];
 
 const after = [
-  { when: "Day 1", title: "Free 30-minute call", text: "Your goals, users and constraints. My honest view." },
-  { when: "Next", title: "A clear plan", text: "Scope, timeline and milestones in writing." },
-  { when: "Then", title: "Build and ship", text: "Regular updates until launch, then support after." },
+  { when: "Day 1", title: "Free 30-minute call", text: "Your goals, users and constraints. My honest view, even if it's \"don't build this yet\"." },
+  { when: "Within 48 hours", title: "Free review", text: "A one-page teardown of your product, or a written review of one AI task." },
+  { when: "Then", title: "Fixed price, in writing", text: "Scope, price and dates agreed before any work. Paid pilots for AI data." },
 ];
 
 const prices = [
   { name: "Flex support", price: "$25", unit: "/ hour", text: "Small tasks and quick fixes." },
-  { name: "Design studio", price: "$2,000", unit: "/ project", text: "Complete UI/UX and prototypes." },
-  { name: "Build & launch", price: "$3,000", unit: "/ project", text: "Designed, built and launched." },
+  { name: "Design sprint", price: "$2,000", unit: "fixed", text: "Clickable product design, ready to test." },
+  { name: "MVP sprint", price: "$3,000", unit: "fixed", text: "Designed, built and launched." },
 ];
 
 
 
 
 export default function Home() {
-  useTitle("", "Product engineer and founder of FynoLabs. I design, build and train AI products end to end. Book a free 30-minute call.");
+  useTitle("", "I design, build and train AI products end to end: fixed-price MVP sprints for founders and benchmark-grade AI data for labs. Start with a free review.");
   // The four strongest projects, all with real product shots.
   // Same kind of image on every card: a plain app screen, framed on the grey panel.
   const picks = [
@@ -115,18 +105,18 @@ export default function Home() {
                 <span className="absolute inline-flex h-full w-full bg-primary opacity-50 motion-safe:animate-ping" />
                 <span className="relative inline-flex h-2 w-2 bg-primary" />
               </span>
-              Open to SPL roles and new projects
+              Booking December projects
             </p>
             <h1 className="display mt-8">
               Ship your AI product <span className="text-primary">faster.</span>
             </h1>
             <p className="mt-8 max-w-lg text-body-lg text-muted-foreground lg:text-xl lg:leading-relaxed">
-              I design, build and train AI products end to end. One partner instead of a designer, a developer and a data team.
+              I design, build and train AI products end to end: fixed-price MVPs for founders, benchmark-grade data for AI labs. One accountable partner instead of a designer, a developer and a data vendor.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <BookButton />
+              <BookButton label="Get a free review" />
               <Link to="/work" className="text-link text-muted-foreground hover:text-foreground">
-                See my work
+                See 57 case studies
               </Link>
             </div>
             <Reassure className="mt-4" />
@@ -158,9 +148,9 @@ export default function Home() {
           <SectionHead
             eyebrow="How can I help?"
             heading={<>Pick what you <span className="text-primary">need.</span></>}
-            aside="Every path ends in the same place: a free call where we work out the next step."
+            aside="Both paths start free, so you can judge the work before paying for it."
           />
-          <div className="mt-20 grid gap-8 md:mt-28 lg:mt-32 lg:grid-cols-3 lg:gap-10">
+          <div className="mt-20 grid gap-8 md:mt-28 lg:mt-32 lg:grid-cols-2 lg:gap-10">
             {doors.map(({ art: Drawing, who, title, body, price, topic, cta }) => (
               <Link key={title} to={`/book?topic=${topic}`} className="group flex flex-col border transition-colors duration-300 hover:border-foreground/30">
                 <Blueprint className="h-56 border-b px-8 md:h-64">

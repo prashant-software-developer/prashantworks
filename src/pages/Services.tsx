@@ -8,7 +8,7 @@ const ART = { product: ProductArt, chat: ChatArt, stack: StackArt, data: DataArt
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
 export default function Services() {
-  useTitle("Services", "Product design, MVP builds, AI features, technical support and AI training data. Plans from $25 an hour.");
+  useTitle("Services", "Fixed-price design and MVP sprints for founders, AI features for SaaS teams, and AI training data for labs. Start with a free teardown.");
   return (
     <>
       <section className="pb-16 pt-20 md:pb-24 md:pt-32">
@@ -22,7 +22,7 @@ export default function Services() {
             </h1>
           </div>
           <div className="flex max-w-xl flex-col justify-end lg:col-span-4">
-            <p className="text-body-lg text-muted-foreground lg:text-xl lg:leading-relaxed">Design, engineering and AI under one roof, so nothing gets lost between handoffs.</p>
+            <p className="text-body-lg text-muted-foreground lg:text-xl lg:leading-relaxed">Design, engineering and AI from one accountable person. Fixed prices, agreed in writing, and a free teardown before you pay anything.</p>
           </div>
         </div>
       </section>
@@ -52,7 +52,7 @@ export default function Services() {
 
       <section className="section-y border-t">
         <div className="wrap">
-          <SectionHead eyebrow="How we work" heading={<>Three steps, <span className="text-primary">no surprises</span></>} />
+          <SectionHead eyebrow="How we work" heading={<>Free first, <span className="text-primary">fixed after</span></>} />
           <div className="mt-20 md:mt-28">
             <IllustratedSteps steps={process} />
           </div>
@@ -61,7 +61,7 @@ export default function Services() {
 
       <section id="pricing" className="section-y scroll-mt-20 border-t">
         <div className="wrap">
-          <SectionHead eyebrow="Pricing" heading={<>Simple <span className="text-primary">plans</span></>} aside="Need something different? I'll put together a custom fit." />
+          <SectionHead eyebrow="Pricing" heading={<>Fixed prices, <span className="text-primary">no surprises</span></>} aside="Scope and price agreed in writing before work starts. Extra scope is quoted, never added silently." />
           <div className="mt-20 grid gap-8 md:mt-28 lg:mt-32 lg:grid-cols-3 lg:gap-10">
             {pricing.map((p) => (
               <div key={p.name} className={`flex flex-col border p-8 md:p-12 ${p.featured ? "border-primary" : ""}`}>

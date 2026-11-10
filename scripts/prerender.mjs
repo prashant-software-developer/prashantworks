@@ -23,7 +23,7 @@ function head(m) {
     `<title>${esc(m.title)}</title>`,
     `<meta name="description" content="${esc(m.description)}" />`,
     `<link rel="canonical" href="${url}" />`,
-    `<meta property="og:type" content="${m.path.startsWith("/work/") ? "article" : "website"}" />`,
+    `<meta property="og:type" content="${(m.path.startsWith("/work/") || m.path.startsWith("/blog/")) ? "article" : "website"}" />`,
     `<meta property="og:title" content="${esc(m.title)}" />`,
     `<meta property="og:description" content="${esc(m.description)}" />`,
     `<meta property="og:url" content="${url}" />`,

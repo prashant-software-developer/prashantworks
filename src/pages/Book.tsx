@@ -8,10 +8,10 @@ const CAL_LINK = "prashantkumarsingh/free-product-discovery-call";
 
 /* The heading and talking points follow the button the visitor clicked. */
 const TOPICS = {
-  product: { heading: "Let's plan your product.", cover: ["What you're building", "What to build first", "Timeline and budget"], note: "Product" },
-  data: { heading: "Let's scope your AI data.", cover: ["Domain and volume", "Rubric and acceptance bar", "A paid pilot"], note: "AI training data" },
+  product: { heading: "Let's plan your product.", cover: ["What you're building", "A free one-page teardown", "Fixed price and timeline"], note: "Product" },
+  data: { heading: "Let's scope your AI data.", cover: ["Task type and volume", "A free 48-hour task review", "A 10-task paid pilot"], note: "AI training data" },
   hire: { heading: "Let's talk about the role.", cover: ["The team and the role", "Where I can help first", "Terms and start date"], note: "Role" },
-  general: { heading: "Let's talk about your idea.", cover: ["Your goals", "How I can help", "A clear next step"], note: "" },
+  general: { heading: "Let's talk about your idea.", cover: ["Your goals", "A free review", "A clear next step"], note: "" },
 } as const;
 type Topic = keyof typeof TOPICS;
 
@@ -86,6 +86,20 @@ export default function Book() {
               </li>
             ))}
           </ul>
+          {topic === "data" && (
+            <p className="mx-auto mt-8 max-w-xl text-small text-muted-foreground">
+              Want the free review without a call? Email one task, rubric or test suite to{" "}
+              <a href={`mailto:${contact.email}?subject=Free%2048-hour%20task%20review`} className="text-foreground underline underline-offset-4 hover:text-primary">{contact.email}</a>.
+              NDA on request, or send a sanitised sample. Written review within 48 hours.
+            </p>
+          )}
+          {topic === "product" && (
+            <p className="mx-auto mt-8 max-w-xl text-small text-muted-foreground">
+              Want the free teardown without a call? Email your product link or a short brief to{" "}
+              <a href={`mailto:${contact.email}?subject=Free%20one-page%20teardown`} className="text-foreground underline underline-offset-4 hover:text-primary">{contact.email}</a>.
+              You'll get a one-page list of what to fix or cut.
+            </p>
+          )}
         </div>
 
         {/* One wrapper around the calendar; Cal.com shows its own loader inside it. */}

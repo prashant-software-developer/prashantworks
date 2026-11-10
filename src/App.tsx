@@ -5,6 +5,9 @@ import Home from "./pages/Home";
 import Work from "./pages/Work";
 /* Case studies carry most of the site's text, so they load as their own chunk. */
 export const CaseStudy = lazy(() => import("./pages/CaseStudy"));
+/* The blog is long-form text too, so its pages load as their own chunk. */
+export const Blog = lazy(() => import("./pages/Blog"));
+export const BlogPost = lazy(() => import("./pages/BlogPost"));
 import Gallery from "./pages/Gallery";
 import AiTraining from "./pages/AiTraining";
 import NotFound from "./pages/NotFound";
@@ -54,6 +57,8 @@ export default function App() {
           {projects.flatMap((p) => [p.slug === "ringover" ? "ringover" : "", ...(p.legacy ?? [])].filter(Boolean).map((old) => (
             <Route key={old} path={old} element={<Navigate to={`/work/${p.slug}`} replace />} />
           )))}
+          <Route path="blog" element={<Suspense fallback={<div className="min-h-screen" />}><Blog /></Suspense>} />
+          <Route path="blog/:slug" element={<Suspense fallback={<div className="min-h-screen" />}><BlogPost /></Suspense>} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="ai-training" element={<AiTraining />} />
           <Route path="services" element={<Services />} />

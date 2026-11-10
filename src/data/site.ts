@@ -16,10 +16,10 @@ export const contact = {
 
 /* Proof, from the Oct 2026 resume */
 export const proof = [
-  { value: "2,500+", label: "AI tasks delivered" },
-  { value: "90%", label: "Acceptance rate" },
-  { value: "25+", label: "Contributors led" },
+  { value: "90%", label: "AI task acceptance" },
+  { value: "4.89/5", label: "Average quality rating" },
   { value: "22+", label: "Products shipped" },
+  { value: "98%", label: "On-time delivery" },
 ];
 
 /* Services (older site content, kept on /services) */
@@ -27,13 +27,13 @@ export const services = [
   {
     art: "product",
     title: "Product & MVP",
-    text: "From idea to live product, fast. Design and engineering under one roof.",
+    text: "From idea to a live product your first users can pay for. Design and engineering by one person, so nothing is lost in handoffs.",
     items: ["Product design", "Rapid MVP builds", "Landing pages", "Payment integration", "Web & mobile apps"],
   },
   {
     art: "chat",
     title: "AI features",
-    text: "LLM features built and shipped into your product, not just consulted on.",
+    text: "LLM features scoped around one user job, grounded in your data, and shipped into your product. Not a slide deck.",
     items: ["LLM integration", "GPT-based tools", "Voice AI", "AI content assistants", "AI UX consultation"],
   },
   {
@@ -45,7 +45,7 @@ export const services = [
   {
     art: "data",
     title: "AI training data",
-    text: "Benchmark-grade tasks, evaluations and RLHF for AI labs and data partners.",
+    text: "Benchmark-grade coding tasks, evaluations and RLHF for AI labs and data partners. Start with a free review of one task.",
     items: ["Prompt engineering", "Annotation & labeling", "RLHF & red-teaming", "Benchmark design"],
     link: "/ai-training",
   },
@@ -60,11 +60,11 @@ export const experience = [
     url: "https://fynolabs.si",
     period: "2025 – Present",
     points: [
-      "Lead 25+ coding and evaluation contributors and reviewers producing benchmark-grade tasks for frontier AI labs and data partners: 2,500+ tasks delivered at a 90% acceptance rate and a 4.89/5 average quality rating.",
+      "Lead vetted coding and evaluation contributors and reviewers producing benchmark-grade tasks for frontier AI labs and data partners, at a 90% acceptance rate and a 4.89/5 average quality rating.",
       "Built a four-stage review flow: scored trial on the client rubric, peer review of every item, senior calibration when grading drifts, and final sign-off before anything ships.",
       "Track acceptance, rework and throughput per contributor; coach or rotate out low performers and promote strong builders to reviewers.",
       "Agree rubrics, domains and acceptance criteria with clients, run paid pilots with 5–10 vetted experts, then scale to full volume within weeks.",
-      "Hands-on author: 50 Terminal-Bench tasks (45 accepted), 9 SWE-bench tasks (7 accepted) and 24 PaperBench tasks (22 accepted).",
+      "Hands-on author: 50 Terminal-Bench tasks (45 accepted), 9 SWE-bench tasks (7 accepted) and 15 PaperBench reviews (14 accepted).",
     ],
   },
   {
@@ -129,9 +129,9 @@ export const audiences = [
 ];
 
 export const process = [
-  { when: "Week 1", title: "Discovery", text: "Goals, scope and what success looks like." },
-  { when: "Week 1–2", title: "Plan", text: "Timeline, milestones and deliverables in writing." },
-  { when: "Ongoing", title: "Build", text: "Design and development, with updates every few days." },
+  { when: "Day 1", title: "Free teardown", text: "Send a link or a brief. You get a one-page fix list, free." },
+  { when: "Week 1", title: "Fixed scope", text: "Price, timeline and deliverables in writing before any work starts." },
+  { when: "Weeks 2+", title: "Build and ship", text: "Working builds every few days, then 30 days of support after launch." },
 ];
 
 export const pricing = [
@@ -144,29 +144,31 @@ export const pricing = [
     cta: "Contact me",
   },
   {
-    name: "Design studio",
+    name: "Design sprint",
     price: "$2,000",
-    unit: "/ project",
-    text: "Polished UX/UI for founders validating an idea.",
+    unit: "fixed price",
+    text: "Clickable product design you can test with users and show to investors.",
     items: ["Complete UI/UX design", "Wireframes + prototypes", "Design system foundations", "2 revision cycles"],
     cta: "Start a design project",
     featured: true,
   },
   {
-    name: "Build & launch",
+    name: "MVP sprint",
     price: "$3,000",
-    unit: "/ project",
-    text: "Designed, built and launched, end to end.",
-    items: ["Everything in Design studio", "Frontend + backend", "Cloud deployment", "AI integration", "30 days post-launch support"],
+    unit: "fixed price",
+    text: "Designed, built and launched, end to end, at a fixed price.",
+    items: ["Everything in the design sprint", "Frontend + backend", "Cloud deployment", "AI integration", "30 days post-launch support"],
     cta: "Build with me",
   },
 ];
 
 /* Questions people ask before booking (home page + FAQ structured data). */
 export const faqs = [
-  { q: "What do we cover on the free call?", a: "Your product goals, challenges and opportunities, and how I can help design, build or scale it. No pressure, just a clear next step." },
+  { q: "What do I get for free before paying?", a: "Founders get a one-page teardown of their product or AI feature. AI labs and data partners get a written review of one task or rubric within 48 hours. Both are yours to keep, whether we work together or not." },
+  { q: "Is the price really fixed?", a: "Yes. The design sprint is $2,000 and the MVP sprint is $3,000, agreed in writing before work starts. Extra scope is quoted separately, never added silently." },
+  { q: "How do you protect confidential work?", a: "I sign your NDA before seeing anything sensitive, never name clients or programmes in public, and work inside your tools and repositories when you prefer." },
+  { q: "How do I know the AI training quality will hold?", a: "Start with a paid pilot of 10 tasks in one week. You grade every task against your own rubric before deciding to scale. Our work is accepted at 90% with a 4.89/5 average quality rating." },
   { q: "Can you both design and build?", a: "Yes. I design in Figma and build in React, Next.js, Node.js and Python, so nothing gets lost between design and code." },
-  { q: "Do you work with teams outside India?", a: "Yes. I work remotely and have shipped with teams in the US, Europe, Hong Kong and India." },
-  { q: "Do you take AI training projects?", a: "Yes. Through FynoLabs I lead 25+ contributors and reviewers. Most teams start with a paid pilot of 5–10 vetted experts." },
-  { q: "How fast can we start?", a: "Book a call this week. I reply to every message within one business day." },
+  { q: "Do you work with teams outside India?", a: "Yes. I work remotely and have shipped with teams in the US, Europe, Hong Kong and India, with overlap in US and European hours." },
+  { q: "How fast can we start?", a: "Usually within a week of the first call. I reply to every message within one business day." },
 ];

@@ -6,6 +6,7 @@ const nav = [
   { to: "/work", label: "Work" },
   { to: "/services", label: "Services" },
   { to: "/ai-training", label: "AI Training" },
+  { to: "/blog", label: "Blog" },
   { to: "/about", label: "About" },
 ];
 
@@ -144,6 +145,7 @@ function Footer() {
           <Link to="/work" className={a}>Work</Link>
           <Link to="/services" className={a}>Services</Link>
           <Link to="/ai-training" className={a}>AI Training</Link>
+          <Link to="/blog" className={a}>Blog</Link>
           <Link to="/about" className={a}>About</Link>
           <Link to="/gallery" className={a}>Gallery</Link>
         </div>
