@@ -368,6 +368,51 @@ export const posts: BlogPost[] = [
     ],
     cta: { label: "Get a free 48-hour task review", topic: "data" },
   },
+  {
+    slug: "designing-ai-agents-people-will-trust",
+    day: 7,
+    date: "2026-11-11",
+    track: "Founders",
+    title: "Designing AI agents people will trust",
+    standfirst: "AI agents can triage thousands of security alerts in seconds. Analysts still won't act on a verdict they can't trace. A case study in designing the handoff between an agent and the person who signs off, and the three rules that came out of it.",
+    heroAlt: "Isometric investigation console: an alert feed on the left, an agent reasoning graph in the middle, an approve lever lit on the right",
+    keywords: ["AI agent UX", "human-in-the-loop design", "agentic AI product design", "SOC platform design", "AI trust", "explainable AI UI", "AI product designer"],
+    body: [
+      { t: "p", text: "Since December 2025 I have been designing a security operations platform where AI agents do the first pass on every alert and human analysts decide what happens next. The product is still in progress, and it has taught me more about AI product design than anything I built before it, because the stakes are unusually clear. If an analyst acts on a wrong verdict, a host gets isolated or credentials get reset across a business. If they ignore a right one, an attacker stays inside the network." },
+      { t: "p", text: "The hardest part was never the AI. The models could triage and investigate at a volume no team of people could match. The hard part was the handoff: the moment an agent's conclusion lands in front of a person who has to decide, in under a minute, whether to believe it. This post is about what I learned designing that moment, and why I now treat it as the first thing to design in any agent product." },
+
+      { t: "h2", text: "The problem: verdicts nobody can trace" },
+      { t: "p", text: "A security operations centre gets far more alerts than its analysts can read, and most turn out to be noise. That is exactly the job AI agents are good at. The platform's agent model has a planner that routes each alert to specialist agents: threat intelligence, reasoning, triage. Each one investigates, enriches the alert with context, and the group arrives at a verdict." },
+      { t: "p", text: "In early reviews, the verdicts were often right. Analysts still did not act on them. When I mapped a normal shift with the team, the reason was plain. A verdict on its own asks the analyst to take the machine on trust. A wall of agent logs underneath it is too slow to read under pressure. Neither gives the person what they need to put their name on a decision: the path from evidence to conclusion, in a form they can check in seconds." },
+
+      { t: "h2", text: "Rule 1: agents recommend, people decide what changes a system" },
+      { t: "p", text: "The first design decision was where autonomy stops. The alternative on the table was letting agents carry out every recommended action and report afterwards, which is faster and makes the product look more impressive in a demo. We rejected it. Agents investigate and enrich on their own, then recommend a step. Anything that changes a system, such as isolating a host or resetting a credential, waits for an analyst to approve, escalate or override." },
+      { t: "p", text: "The rule has a mechanism behind it. Every tool an agent can reach is marked read-only or read-write, per agent, in a permissions screen an admin controls. That lets a team widen autonomy one tool at a time as trust builds, instead of choosing between \"fully manual\" and \"fully automatic\" on day one. Autonomy goes where mistakes are cheap. A person stays on the steps that are hard to undo." },
+
+      { t: "h2", text: "Rule 2: show the reasoning as a path, not a score" },
+      { t: "p", text: "The second decision was how to show why. A single confidence number with a log underneath was the obvious option, and it fails for the reason above: a number is a request for trust, and a log is a request for time. Instead I designed an investigation graph. It shows which agents worked on the alert, what each found, and how their findings came together into the verdict. Key findings, confidence, a short summary and a conclusion follow in plain language." },
+      { t: "p", text: "The graph changes how analysts behave. They can check the path rather than the answer, and jump straight to the agent whose finding looks wrong. Disagreement between agents becomes visible instead of being hidden inside an average. In practice, the graph is where trust is built: an analyst who has traced five verdicts and found them sound starts approving the sixth faster, and that is the speed gain the product was meant to deliver." },
+
+      { t: "h2", text: "Rule 3: keep the dense view dense" },
+      { t: "p", text: "The third decision was about the alert queue itself, which holds thousands of rows. A card layout with generous space per alert looked calmer in mockups and showed a fraction of the queue. I kept a dense table: severity chips, source and verdict in fixed columns, filters and bulk select on top, pagination underneath, and a small inline view that opens an alert's summary without leaving the list." },
+      { t: "p", text: "This matters for trust in a less obvious way. Analysts compare. They want to see the verdict on this alert next to the ten similar ones from the last hour. A layout that hides the queue hides the pattern, and the pattern is often what tells an experienced person whether the agent is right." },
+      { t: "callout", title: "The three rules, in one line each", text: "Autonomy where mistakes are cheap, approval where they are not. Show the path to the verdict, not a score. Keep the comparison view dense enough to spot a pattern." },
+
+      { t: "h2", text: "What this looks like as a product" },
+      { t: "p", text: "The platform has two home screens, a classic dashboard and an agentic one with a live agent log, so teams can move between the two ways of working. Alerts have a table, a detail view, the investigation graph and recommended actions. Analytics cover MITRE ATT&CK coverage, detection and response times, and agent agreement, which is a direct measure of how often the specialist agents reach the same conclusion. Agent settings hold per-tool permissions and an analyst workbench. All of it sits on a design system I built for the product, from severity chips and agent cards to charts and tables, in light and dark themes, so dense screens stay consistent as agents are added." },
+      { t: "p", text: "The full case study, with screens and every design decision, is on this site. The client is not named, and the scenarios shown are realistic threats such as phishing, credential dumping and lateral movement rather than real incidents." },
+
+      { t: "h2", text: "Why the handoff is the whole product" },
+      { t: "p", text: "Most AI agent products are pitched on what the agent can do. The ones that get used are designed around what the person does with the result. Writing the \"why\" before the AI, deciding where approval sits before building a single agent, and designing the comparison view before the detail view are not polish. They are the difference between a verdict that gets acted on and one that gets ignored." },
+      { t: "p", text: "If you are building an agent into your product, I would start with one question: at the moment a person sees the agent's output, what do they need in order to act on it without checking everything by hand? Design that screen first. Everything else follows from it." },
+    ],
+    forFounders: "If your product has an AI feature that produces recommendations, ask where approval sits and whether a user can see the path to the answer. If either is unclear, the teardown will show you where trust leaks. Send the feature, not a pitch.",
+    forLabs: "The same handoff problem shows up in evaluation. A grader that outputs a score with no trace is a verdict nobody can check. Rubrics and graders that show which criterion failed and why get adopted by reviewers; opaque ones get argued with.",
+    sources: [
+      { title: "Case study: Agentic SOC Platform (this site)", url: "https://www.prashantworks.com/work/agentic-soc-platform" },
+    ],
+    cta: { label: "Get a free one-page teardown", topic: "product" },
+  },
 ];
 
 export const postBySlug = (slug: string) => posts.find((p) => p.slug === slug);
