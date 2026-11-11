@@ -39,6 +39,7 @@ export const content: Record<string, CaseContent> = {
         { name: "Investigations", items: ["Investigations overview", "Alert lifecycle"] },
         { name: "Analytics", items: ["MITRE ATT&CK", "MTTD, MTTR and MTTI", "Agent agreement"] },
         { name: "Agents and tools", items: ["Agent details", "Tool permissions", "Analyst workbench"] },
+        { name: "Config Mind", items: ["Risk and coverage dashboard", "Policy drift and exclusions", "Manage, compare and version policies"] },
       ],
     },
     decisions: [
