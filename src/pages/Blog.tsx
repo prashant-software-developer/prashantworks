@@ -1,7 +1,15 @@
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Closing } from "../components/Layout";
 import { useTitle } from "../components/useTitle";
-import { heroGif, heroStill, postPath, readingTime, sortedPosts, trackLabel, type BlogPost } from "../data/blog";
+import { heroGif, heroStill, postPath, readingTime, sortedPosts, trackLabel, type BlogPost, type Track } from "../data/blog";
+
+type Filter = "All" | Track;
+const FILTERS: { key: Filter; label: string }[] = [
+  { key: "All", label: "All posts" },
+  { key: "Founders", label: "For founders" },
+  { key: "AI labs", label: "For AI labs" },
+];
 
 const fmt = (iso: string) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 
@@ -33,7 +41,9 @@ function Card({ p, eager }: { p: BlogPost; eager?: boolean }) {
 
 export default function Blog() {
   useTitle("Blog", "Short, sourced write-ups on building AI products and benchmark-grade AI training data. The full version of every post on X, Threads and Instagram.");
-  const list = sortedPosts();
+  const [filter, setFilter] = useState<Filter>("All");
+  const all = sortedPosts();
+  const list = useMemo(() => (filter === "All" ? all : all.filter((p) => p.track === filter || p.track === "Both")), [all, filter]);
   return (
     <>
       <section className="pb-12 pt-20 md:pt-28">
@@ -46,7 +56,7 @@ export default function Blog() {
               </h1>
             </div>
             <p className="max-w-xl self-end text-body-lg text-muted-foreground lg:col-span-4 lg:text-xl lg:leading-relaxed">
-              One illustrated piece a day on building AI products and the data that trains them. Every number has a source. Every post ends with a free next step.
+              Sixty illustrated pieces on building AI products and the data that trains and tests AI models. Every number has a source. Every post ends with a free next step.
             </p>
           </div>
         </div>
@@ -54,6 +64,20 @@ export default function Blog() {
 
       <section className="pb-24 pt-8 md:pb-32">
         <div className="wrap">
+          <div className="mb-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-b pb-5 md:mb-16">
+            {FILTERS.map((f) => (
+              <button
+                key={f.key}
+                type="button"
+                onClick={() => setFilter(f.key)}
+                aria-pressed={filter === f.key}
+                className={`text-eyebrow uppercase tracking-wider transition-colors ${filter === f.key ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {f.label}
+              </button>
+            ))}
+            <span className="ml-auto text-small text-muted-foreground">{list.length} posts</span>
+          </div>
           <div className="grid gap-x-10 gap-y-16 md:grid-cols-2 lg:gap-x-14 lg:gap-y-20">
             {list.map((p, i) => <Card key={p.slug} p={p} eager={i < 2} />)}
           </div>

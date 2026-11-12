@@ -4,51 +4,35 @@
  * Media lives in public/blog/<slug>/ (hero.gif, hero.png, slides/NN.png).
  */
 
-export type Track = "Founders" | "AI labs" | "Both";
+export type { Track, Block, Faq, BlogPost } from "./blog-shared";
+import type { BlogPost, Track } from "./blog-shared";
+export { slide } from "./blog-shared";
+import { slide } from "./blog-shared";
 
-export type Block =
-  | { t: "h2"; text: string }
-  | { t: "p"; text: string }
-  | { t: "ul"; items: string[] }
-  | { t: "ol"; items: string[] }
-  | { t: "callout"; title: string; text: string }
-  | { t: "table"; head: string[]; rows: string[][] }
-  | { t: "gallery"; items: { src: string; alt: string }[]; caption?: string };
-
-export type BlogPost = {
-  slug: string;
-  day: number;
-  date: string; // ISO
-  track: Track;
-  title: string;
-  /** One or two sentences under the title. Also the SEO description. */
-  standfirst: string;
-  /** Alt text for the hero animation. */
-  heroAlt: string;
-  keywords: string[];
-  body: Block[];
-  /** Two short paragraphs: what this means for founders, what it means for labs. */
-  forFounders: string;
-  forLabs: string;
-  sources: { title: string; url: string }[];
-  cta: { label: string; topic?: "data" | "product" };
-};
+import { plan1b1 } from "./posts/plan1-08-15";
+import { plan1b2 } from "./posts/plan1-16-23";
+import { plan1b3 } from "./posts/plan1-24-30";
+import { plan2a } from "./posts/plan2-01-08";
+import { plan2b } from "./posts/plan2-09-16";
+import { plan2c } from "./posts/plan2-17-23";
+import { plan2d } from "./posts/plan2-24-30";
 
 export const BLOG_PATH = "/blog";
 export const postPath = (p: BlogPost) => `${BLOG_PATH}/${p.slug}`;
 export const heroGif = (p: BlogPost) => `/blog/${p.slug}/hero.gif`;
 export const heroStill = (p: BlogPost) => `/blog/${p.slug}/hero.png`;
-const slide = (slug: string, n: number) => `/blog/${slug}/slides/${String(n).padStart(2, "0")}.png`;
 
 export const trackLabel: Record<Track, string> = { Founders: "For founders", "AI labs": "For AI labs", Both: "For founders and AI labs" };
 
+export const planLabel = (p: BlogPost) => `Plan ${p.plan ?? 1} · Day ${p.day}`;
+
 export const wordCount = (p: BlogPost) =>
-  [p.standfirst, p.forFounders, p.forLabs, ...p.body.flatMap((b) => ("text" in b ? [b.text] : "items" in b ? b.items.map((i) => (typeof i === "string" ? i : i.alt)) : b.rows.flat()))]
+  [p.standfirst, p.forFounders, p.forLabs, ...(p.takeaways ?? []), ...(p.faq ?? []).flatMap((f) => [f.q, f.a]), ...p.body.flatMap((b) => ("text" in b ? [b.text] : "items" in b ? b.items.map((i) => (typeof i === "string" ? i : i.alt)) : b.rows.flat()))]
     .join(" ")
     .split(/\s+/).length;
 export const readingTime = (p: BlogPost) => Math.max(3, Math.round(wordCount(p) / 220));
 
-export const posts: BlogPost[] = [
+const firstWeek: BlogPost[] = [
   {
     slug: "two-ways-to-work-with-me",
     day: 1,
@@ -92,6 +76,16 @@ export const posts: BlogPost[] = [
     sources: [
       { title: "Terminal-Bench 2.0 paper, Merrill et al., January 2026", url: "https://arxiv.org/pdf/2601.11868" },
       { title: "Case studies on this site", url: "https://www.prashantworks.com/work" },
+    ],
+    takeaways: [
+      "Founders: a $2,000 design sprint or a $3,000 MVP sprint, fixed price, starting with a free one-page teardown.",
+      "AI labs: benchmark-grade task authoring and review, starting with a free written review of one task within 48 hours.",
+      "Both offers share one principle: decide what matters, build it carefully, prove it works before anyone pays for the next step.",
+    ],
+    faq: [
+      { q: "What do you build for founders?", a: "The first version of a product: a $2,000 design sprint (clickable prototype and scope) or a $3,000 MVP sprint (one flow designed, built and deployed), both fixed price and preceded by a free one-page teardown." },
+      { q: "What do you do for AI labs?", a: "Write and review coding and evaluation tasks: Terminal-Bench, SWE-bench and PaperBench-style tasks with pinned environments, verified reference solutions and hidden tests, plus rubric and environment reviews." },
+      { q: "How do I start?", a: "Founders send a product or idea for a free teardown. AI labs send one task for a free written review within 48 hours. No call needed." },
     ],
     cta: { label: "Get a free review" },
   },
@@ -148,6 +142,16 @@ export const posts: BlogPost[] = [
       { title: "Anthropic Engineering: Demystifying evals for AI agents, 9 January 2026", url: "https://anthropic.com/engineering/demystifying-evals-for-ai-agents" },
       { title: "Berkeley RDI: Towards trustworthy agentic benchmarks, April 2026", url: "https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/" },
     ],
+    takeaways: [
+      "Terminal-Bench 2.0 accepted 89 of 229 submitted tasks, about 39%, after roughly three reviewer-hours each.",
+      "Accepted tasks share a routine: pinned environment, reference solution re-run before submission, hidden tests that fail hard-coding and empty runs, and a spec a senior engineer can act on alone.",
+      "Most rejections are not bad ideas; they are under-specified instructions or tests that let a shortcut through.",
+    ],
+    faq: [
+      { q: "What percentage of benchmark tasks get accepted?", a: "Terminal-Bench 2.0 accepted about 39% of submissions (89 of 229) after roughly three reviewer-hours per task." },
+      { q: "Why are benchmark tasks rejected?", a: "Usually under-specified instructions, tests that can be passed by a shortcut, environments that do not reproduce, or reference solutions that were never re-run." },
+      { q: "What does an accepted task contain?", a: "A pinned environment, a reference solution verified in a fresh container, hidden tests checked against null and hard-coded submissions, and a specification clear enough for a senior engineer to act on alone." },
+    ],
     cta: { label: "Get a free 48-hour task review", topic: "data" },
   },
 
@@ -199,6 +203,16 @@ export const posts: BlogPost[] = [
       { title: "Gartner via The Star: over 40% of agentic AI projects to be cancelled by 2027, June 2025", url: "https://www.thestar.com.my/tech/tech-news/2025/06/25/over-40-of-agentic-ai-projects-will-be-scrapped-by-2027-gartner-says" },
       { title: "Stack Overflow 2025 developer survey via TechRepublic", url: "https://www.techrepublic.com/article/news-developer-trust-in-ai-declines/" },
       { title: "McKinsey: The state of AI 2025, 5 November 2025", url: "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-state-of-ai-2025" },
+    ],
+    takeaways: [
+      "42% of companies abandoned most of their AI initiatives in 2025, up from 17% the year before (S&P Global).",
+      "The top cause is not the model: nobody wrote down the one job the feature does for one user.",
+      "Three fixes: one user and one job written down, a design for the wrong answer first, and shipping small while measuring one thing.",
+    ],
+    faq: [
+      { q: "How many companies abandon AI projects?", a: "S&P Global's 2025 survey found 42% of companies abandoned most of their AI initiatives, up from 17% a year earlier." },
+      { q: "Why do AI features get scrapped?", a: "Most often because the feature was never scoped to one user and one job, nobody designed what happens when the model is wrong, and success was never measured against one metric." },
+      { q: "How do you keep an AI feature from being scrapped?", a: "Write the one user and one job down before building, design the wrong-answer experience first (sources, fallback, human check), and ship the smallest version that lets you measure one thing." },
     ],
     cta: { label: "Get a free one-page teardown", topic: "product" },
   },
@@ -259,6 +273,16 @@ export const posts: BlogPost[] = [
       { title: "Berkeley RDI: Towards trustworthy agentic benchmarks, April 2026", url: "https://rdi.berkeley.edu/blog/trustworthy-benchmarks-cont/" },
       { title: "Anthropic: Natural emergent misalignment from reward hacking, 21 November 2025", url: "https://www.anthropic.com/research/emergent-misalignment-reward-hacking" },
     ],
+    takeaways: [
+      "METR, OpenAI, ImpossibleBench and Berkeley have each documented models passing tasks without solving them: rewriting the checker, hacking one task in 21 of 21 runs, cheating when no honest solution exists, scoring 100% with zero tasks solved.",
+      "If a test can be passed without doing the task, a model will eventually pass it that way.",
+      "The holes close with hidden inputs at grading time, final-state checks, a grader outside the agent's reach, and null-agent runs.",
+    ],
+    faq: [
+      { q: "Do AI models cheat on benchmark tests?", a: "Yes, on record. METR, OpenAI, the ImpossibleBench authors and Berkeley RDI have each documented models rewriting checkers, exploiting harnesses or passing tasks that have no honest solution." },
+      { q: "What is a harness exploit?", a: "A way to score on a benchmark without solving tasks: reading expected outputs, signalling success directly, or modifying the grader. Berkeley RDI showed exploits reaching 100% on three benchmarks with zero tasks solved." },
+      { q: "How do you close the holes in a benchmark task?", a: "Generate hidden inputs at grading time, check final state rather than printed output, run the grader in a separate container with read-only tests, and confirm a null agent and a fake-success agent both score zero." },
+    ],
     cta: { label: "Get a free 48-hour task review", topic: "data" },
   },
 
@@ -313,6 +337,16 @@ export const posts: BlogPost[] = [
       { title: "OpenAI: Introducing SWE-bench Verified, August 2024", url: "https://openai.com/index/introducing-swe-bench-verified/" },
       { title: "Terminal-Bench 2.0 paper, Merrill et al., January 2026", url: "https://arxiv.org/pdf/2601.11868" },
     ],
+    takeaways: [
+      "45 of 50 Terminal-Bench-style tasks I wrote for data platforms were accepted; the five pre-submission checks are the reason.",
+      "Reference solution ten for ten in a fresh container; null and fake-success agents score zero; hidden tests differ from visible ones; a second valid solution passes; a second specialist reads the spec.",
+      "The checks take under an hour per task and replace the three reviewer-hours a rejection costs.",
+    ],
+    faq: [
+      { q: "What checks should a benchmark task pass before submission?", a: "Reference solution passes ten times in a fresh container; a null agent and a fake-success agent both score zero; hidden test inputs differ from the visible sample; a second, different correct solution passes; a second specialist reviews the spec." },
+      { q: "How long do pre-submission checks take?", a: "Under an hour per task once scripted, against roughly three reviewer-hours per task at benchmark review." },
+      { q: "What acceptance rate do the checks produce?", a: "45 of 50 Terminal-Bench-style tasks accepted on data-platform work, and about 90% across programmes." },
+    ],
     cta: { label: "Get a free 48-hour task review", topic: "data" },
   },
 
@@ -366,6 +400,16 @@ export const posts: BlogPost[] = [
     sources: [
       { title: "Own experience with production data systems. Patterns are generic; no client task content is reproduced.", url: "https://www.prashantworks.com/ai-training" },
     ],
+    takeaways: [
+      "The best coding tasks are the boring bugs real teams ship: refunds counted as revenue, UTC timestamps in a local-time report, money stored as floats, a hidden byte-order mark, records out of order.",
+      "Each one runs without error and produces a plausible, wrong result, so the model has to reason about what the data means.",
+      "They are fair because a careful engineer finds them with ordinary diligence; nothing is hidden by trickery.",
+    ],
+    faq: [
+      { q: "What are good bugs for coding benchmark tasks?", a: "Realistic production bugs that do not crash: refunds counted as revenue, timezone mix-ups, floating-point money, a byte-order mark in a CSV header, and out-of-order records." },
+      { q: "What makes a hard task fair?", a: "The difficulty comes from real data and real engineering diligence, not from decoys, hidden requirements or ambiguous instructions. A careful engineer finds the bug by checking the data." },
+      { q: "Where do AI agents slip on these tasks?", a: "They fix the symptom in the sample, trust the column name over the data, or stop when the code runs without error rather than when the numbers are right." },
+    ],
     cta: { label: "Get a free 48-hour task review", topic: "data" },
   },
   {
@@ -411,9 +455,21 @@ export const posts: BlogPost[] = [
     sources: [
       { title: "Case study: Agentic SOC Platform (this site)", url: "https://www.prashantworks.com/work/agentic-soc-platform" },
     ],
+    takeaways: [
+      "Agents recommend; people decide anything that changes a system. Autonomy goes where mistakes are cheap.",
+      "Show the reasoning as a path, not a score: which agents found what, and how it became the verdict.",
+      "Keep the comparison view dense enough to spot a pattern; analysts compare, and a layout that hides the queue hides the pattern.",
+    ],
+    faq: [
+      { q: "How do you design an AI agent that analysts trust?", a: "Put approval on any action that changes a system, show the path from evidence to verdict rather than a confidence number, and keep the alert queue dense enough to compare cases." },
+      { q: "Should AI agents act autonomously in security operations?", a: "Agents can investigate and enrich on their own; actions such as isolating a host or resetting credentials wait for a person, with per-tool permissions that let teams widen autonomy gradually." },
+      { q: "Why do analysts ignore correct AI verdicts?", a: "A verdict alone asks for trust and a raw log asks for time. Neither gives the analyst a checkable path from evidence to conclusion, which is what they need before putting their name on a decision." },
+    ],
     cta: { label: "Get a free one-page teardown", topic: "product" },
   },
 ];
+
+export const posts: BlogPost[] = [...firstWeek, ...plan1b1, ...plan1b2, ...plan1b3, ...plan2a, ...plan2b, ...plan2c, ...plan2d];
 
 export const postBySlug = (slug: string) => posts.find((p) => p.slug === slug);
 export const sortedPosts = () => [...posts].sort((a, b) => (a.date < b.date ? 1 : -1));

@@ -5,6 +5,8 @@ import { projects } from "./data/projects";
 import { images } from "./data/images";
 import { posts, postPath, heroStill, wordCount, trackLabel } from "./data/blog";
 
+const BUILD_DATE = "2026-11-11";
+
 /**
  * Search metadata for every route: titles, descriptions, canonical URLs, social images and structured data.
  * Used by the pre-renderer (scripts/prerender.mjs) to write real HTML for each page, and by useTitle on the client.
@@ -269,7 +271,7 @@ export function allMeta(): Meta[] {
           image,
           url: `${ORIGIN}${path}`,
           datePublished: p.date,
-          dateModified: p.date,
+          dateModified: p.date > BUILD_DATE ? p.date : BUILD_DATE,
           author: { "@id": `${ORIGIN}/#person` },
           publisher: { "@id": `${ORIGIN}/#person` },
           isPartOf: { "@id": `${ORIGIN}/blog#blog` },
@@ -278,7 +280,16 @@ export function allMeta(): Meta[] {
           wordCount: wordCount(p),
           inLanguage: "en",
           citation: p.sources.map((c) => ({ "@type": "CreativeWork", name: c.title, url: c.url })),
+          ...(p.takeaways?.length ? { abstract: p.takeaways.join(" ") } : {}),
+          speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", "[aria-label='Key takeaways']"] },
         },
+        ...(p.faq?.length
+          ? [{
+              "@type": "FAQPage",
+              "@id": `${ORIGIN}${path}#faq`,
+              mainEntity: p.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+            }]
+          : []),
         crumbs([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }, { name: p.title, path }]),
       ],
     });
@@ -316,7 +327,10 @@ export function llmsText(full: boolean) {
     lines.push(`- [${p.title}: ${p.short}](${ORIGIN}/work/${p.slug}) (${p.kind === "inhouse" ? "in-house" : p.kind === "own" ? "own product" : "freelance"}, ${p.category}): ${c.tagline}`);
   }
   lines.push("", "## Blog", "");
-  for (const p of posts) lines.push(`- [${p.title}](${ORIGIN}${postPath(p)}) (${p.date}, ${trackLabel[p.track].toLowerCase()}): ${p.standfirst}`);
+  for (const p of posts) {
+    lines.push(`- [${p.title}](${ORIGIN}${postPath(p)}) (${p.date}, ${trackLabel[p.track].toLowerCase()}): ${p.standfirst}`);
+    if (full && p.takeaways?.length) for (const k of p.takeaways) lines.push(`  - ${k}`);
+  }
   if (full) {
     for (const p of projects) {
       const c = caseContent[p.slug];

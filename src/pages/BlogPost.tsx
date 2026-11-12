@@ -3,7 +3,7 @@ import { Closing } from "../components/Layout";
 import { Inline } from "../components/Inline";
 import { useTitle } from "../components/useTitle";
 import NotFound from "./NotFound";
-import { heroGif, heroStill, postBySlug, postPath, readingTime, sortedPosts, trackLabel, type Block } from "../data/blog";
+import { heroGif, heroStill, planLabel, postBySlug, postPath, readingTime, sortedPosts, trackLabel, type Block } from "../data/blog";
 
 const fmt = (iso: string) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 
@@ -90,7 +90,7 @@ export default function BlogPost() {
         <div className="wrap">
           <div className="mx-auto max-w-[840px]">
             <nav aria-label="Breadcrumb" className="text-eyebrow uppercase text-muted-foreground">
-              <Link to="/blog" className="hover:text-foreground">Blog</Link> <span aria-hidden="true">/</span> Day {p.day}
+              <Link to="/blog" className="hover:text-foreground">Blog</Link> <span aria-hidden="true">/</span> {planLabel(p)}
             </nav>
 
             {/* Illustration first */}
@@ -115,9 +115,37 @@ export default function BlogPost() {
               </p>
             </header>
 
+            {p.takeaways && p.takeaways.length > 0 && (
+              <section aria-label="Key takeaways" className="mt-10 max-w-[720px] border-t-2 border-foreground pt-6">
+                <p className="eyebrow">In short</p>
+                <ul className="mt-4 space-y-3 text-body text-foreground">
+                  {p.takeaways.map((x) => (
+                    <li key={x} className="flex gap-4">
+                      <span aria-hidden="true" className="mt-[0.7em] h-1.5 w-1.5 shrink-0 bg-primary" />
+                      <span>{x}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
             <div className="mt-6 max-w-[720px]">
               {p.body.map((b, k) => <Body key={k} b={b} />)}
             </div>
+
+            {p.faq && p.faq.length > 0 && (
+              <section className="mt-20 max-w-[720px] border-t pt-12">
+                <p className="eyebrow">Questions people ask</p>
+                <dl className="mt-6 divide-y">
+                  {p.faq.map((f) => (
+                    <div key={f.q} className="py-6 first:pt-0">
+                      <dt className="text-title text-foreground">{f.q}</dt>
+                      <dd className={`mt-3 ${prose}`}>{f.a}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )}
 
             {/* The mix: what this means for each reader */}
             <section className="mt-20 grid gap-10 border-t pt-12 md:grid-cols-2 md:gap-14">
@@ -141,6 +169,19 @@ export default function BlogPost() {
                 ))}
               </ol>
             </section>
+
+            <aside className="mt-16 flex gap-6 border-t pt-10">
+              <div>
+                <p className="eyebrow">Written by</p>
+                <p className="mt-3 text-title text-foreground">Prashant Kumar Singh</p>
+                <p className="mt-2 max-w-[560px] text-body text-muted-foreground">
+                  Product engineer and designer. Ships AI features at Ringover, builds fixed-price MVPs for founders, and writes and reviews benchmark-grade coding and evaluation tasks for AI labs. Every number in this post links to its source.
+                </p>
+                <p className="mt-3 text-small text-muted-foreground">
+                  <Link to="/about" className="underline decoration-border underline-offset-4 hover:text-foreground hover:decoration-foreground">About</Link> · <Link to="/work" className="underline decoration-border underline-offset-4 hover:text-foreground hover:decoration-foreground">Case studies</Link> · <Link to="/ai-training" className="underline decoration-border underline-offset-4 hover:text-foreground hover:decoration-foreground">AI training work</Link>
+                </p>
+              </div>
+            </aside>
 
             <nav aria-label="More posts" className="mt-16 grid gap-6 border-t pt-10 sm:grid-cols-2">
               {older ? (

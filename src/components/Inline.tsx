@@ -14,7 +14,12 @@ export function Inline({ text }: { text: string }) {
     else if (s.startsWith("`")) parts.push(<code key={i++} className="rounded-none bg-secondary px-1.5 py-0.5 font-mono text-[0.9em] text-foreground">{s.slice(1, -1)}</code>);
     else {
       const mm = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(s)!;
-      parts.push(<a key={i++} href={mm[2]} target="_blank" rel="noopener noreferrer" className="text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground">{mm[1]}</a>);
+      const internal = mm[2].startsWith("/");
+      parts.push(
+        <a key={i++} href={mm[2]} {...(internal ? {} : { target: "_blank", rel: "noopener noreferrer" })} className="text-foreground underline decoration-border underline-offset-4 hover:decoration-foreground">
+          {mm[1]}
+        </a>,
+      );
     }
     last = m.index + s.length;
   }
